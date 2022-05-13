@@ -1,0 +1,113 @@
+openapi: 3.0.3
+info:
+  title: ApPOLLo backend API
+  description: ApPOLLo API enables creation and management of polls, answers and app's users.
+  version: 0.0.1
+paths:
+
+components:
+  schemas:
+    # Poll components
+    Question:
+      type: object
+      required:
+        - id
+        - text
+        - type
+      properties:
+        id:
+          type: integer
+          example: 1234
+          readOnly: true
+        text:
+          type: string
+          example: What is your favorite color?
+          description: Question content text.
+        type:
+          type: string
+          example: radio
+          enum:
+            - text
+            - radio
+            - checkbox
+            - email
+            - datetime
+            - file
+            - number
+          description: Question type.
+        options:
+          type: array
+          items:
+            type: string
+    Answer:
+      type: object
+      required:
+        - id
+        - question_id
+        - answer_json
+      properties:
+        id:
+          type: integer
+          example: 1234
+          readOnly: true
+        question_id:
+          type: integer
+          example: 1234
+        answer_json:
+          type: string
+          example: Blue
+          description: Answer text (possibly a JSON object).
+    # Polls
+    Poll:
+      type: object
+      required:
+        - id
+        - questions
+      properties:
+        id:
+          type: integer
+          example: 1234
+          readOnly: true
+        name:
+          type: string
+          example: Favorite things poll
+        is_active:
+          type: boolean
+          default: true
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+    FilledPoll:
+      type: object
+      required:
+        - poll_id
+        - answers
+      properties:
+        poll_id:
+          type: integer
+          example: 1234
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Answer'
+    # Poll accessing
+    PollList:
+      type: object
+      properties:
+        polls:
+          type: array
+          items:
+            $ref: '#/components/schemas/PollListRecord'
+    PollListRecord:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1234
+          readOnly: true
+        name:
+          type: string
+          example: Favorite things poll
+  # TODO: Users
+  # TODO: Answer accessing
