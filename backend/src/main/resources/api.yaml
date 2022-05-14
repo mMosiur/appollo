@@ -250,3 +250,50 @@ components:
         name:
           type: string
           example: Favorite things poll
+    # Users
+    User:
+      type: object
+      required:
+        - id
+        - username
+        - password
+        - email
+        - user_details
+      properties:
+        id:
+          type: integer
+          example: 1234
+          readOnly: true
+        username:
+          type: string
+          example: FlyingPanda98
+        password:
+          type: string
+          example: Securepassword1337!
+        email:
+          type: string
+          example: flpanda98@site.com
+        user_details:
+          $ref: '#/components/schemas/UserDetails'
+
+    UserDetails:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          example: 1234
+          readOnly: true
+        age:
+          type: integer
+          example: 24
+          default: -1
+        sex:
+          type: string
+          example: male
+          enum:
+            - male
+            - female
+            - unspecified
+          default: unspecified
