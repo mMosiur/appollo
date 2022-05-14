@@ -243,5 +243,3 @@ components:
         name:
           type: string
           example: Favorite things poll
-  # TODO: Users
-  # TODO: Answer accessing
