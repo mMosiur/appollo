@@ -4,7 +4,140 @@ info:
   description: ApPOLLo API enables creation and management of polls, answers and app's users.
   version: 0.0.1
 paths:
-
+  # Endpoint dedicated to creation and browsing of all polls
+  /polls:
+    post:
+      description: Create a new poll.
+      operationId: createPoll
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Poll'
+        required: true
+      responses:
+        201:
+          description: Poll created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Poll'
+        400:
+          description: Invalid request.
+    get:
+      description: Get all polls.
+      operationId: getPolls
+      responses:
+        200:
+          description: A list of all active polls.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PollList'
+  # Endpoint dedicated to view and management of a specific existing poll
+  /polls/{id}:
+    get:
+      description: Get a poll of a given id.
+      operationId: getPollById
+      parameters:
+        - name: id
+          description: Id of the requested poll.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      responses:
+        200:
+          description: A poll object of a given id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Poll'
+        404:
+          description: Poll not found.
+    put:
+      description: Update a poll of a given id.
+      operationId: updatePollById
+      parameters:
+        - name: id
+          description: Id of the updated poll.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Poll'
+        required: true
+      responses:
+        200:
+          description: Poll successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Poll'
+        403:
+          description: User not clear to edit this poll.
+        404:
+          description: Poll not found.
+    delete:
+      description: Remove a poll of a given id.
+      operationId: deletePollById
+      parameters:
+        - name: id
+          description: Id of the deleted poll.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      responses:
+        200:
+          description: Poll successfully deleted.
+        404:
+          description: Poll not found.
+  # Endpoint dedicated to submitting user answers to a specific active poll.
+  /poll/{id}/answers:
+    post:
+      description: Add a set of user submitted answers to the given poll.
+      operationId: submitAnswersToPollById
+      parameters:
+        - name: id
+          description: Id of the target poll.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FilledPoll'
+        required: true
+      responses:
+        202:
+          description: Answers submitted succesfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Answer'
+        400:
+          description: Invalid request.
 components:
   schemas:
     # Poll components
@@ -70,6 +203,7 @@ components:
           readOnly: true
         name:
           type: string
+          default: Poll
           example: Favorite things poll
         is_active:
           type: boolean
