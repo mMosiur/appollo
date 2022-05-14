@@ -107,7 +107,7 @@ paths:
         404:
           description: Poll not found.
   # Endpoint dedicated to submitting user answers to a specific active poll.
-  /poll/{id}/answers:
+  /polls/{id}/answers:
     post:
       description: Add a set of user submitted answers to the given poll.
       operationId: submitAnswersToPollById
