@@ -1,10 +1,10 @@
-package org.umcs.appoll;
+package org.umcs.appollo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AppollApplicationTests {
+class AppolloApplicationTests {
 
 	@Test
 	void contextLoads() {

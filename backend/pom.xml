@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>org.umcs</groupId>
-	<artifactId>appoll</artifactId>
+	<artifactId>appollo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>appoll</name>
+	<name>appollo</name>
 	<description>A polling app project for Enterprise Applications classes</description>
 	<properties>
 		<java.version>11</java.version>
