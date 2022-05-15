@@ -1,6 +1,7 @@
 package org.umcs.appollo.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class PollEntity {
@@ -13,8 +14,11 @@ public class PollEntity {
     private String name;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id", nullable=true)
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
+
+    @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL)
+    private List<QuestionEntity> questions;
 
     public PollEntity() {
     }
@@ -45,5 +49,13 @@ public class PollEntity {
 
     public void setUser(UserEntity user) {
         this.user = user;
+    }
+
+    public List<QuestionEntity> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<QuestionEntity> questions) {
+        this.questions = questions;
     }
 }
