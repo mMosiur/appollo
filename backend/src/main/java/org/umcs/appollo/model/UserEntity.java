@@ -1,13 +1,14 @@
 package org.umcs.appollo.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = "email"), @UniqueConstraint(columnNames = "username")})
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", updatable = false)
+    @Column(name = "id", nullable = false, updatable = false)
     private Integer id;
 
     @Column(name = "username", nullable = false)
@@ -24,6 +25,9 @@ public class UserEntity {
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<PollEntity> polls;
 
     public UserEntity() {
     }
@@ -82,6 +86,14 @@ public class UserEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<PollEntity> getPolls() {
+        return polls;
+    }
+
+    public void setPolls(List<PollEntity> polls) {
+        this.polls = polls;
     }
 
     @Override
