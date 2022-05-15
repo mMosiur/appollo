@@ -29,6 +29,9 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PollEntity> polls;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<AnswerEntity> answers;
+
     public UserEntity() {
     }
 
@@ -94,6 +97,14 @@ public class UserEntity {
 
     public void setPolls(List<PollEntity> polls) {
         this.polls = polls;
+    }
+
+    public List<AnswerEntity> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<AnswerEntity> answers) {
+        this.answers = answers;
     }
 
     @Override
