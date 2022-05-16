@@ -136,6 +136,10 @@ paths:
       responses:
         201:
           description: Answers submitted succesfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FilledPoll"
         400:
           description: Invalid request.
         409:
