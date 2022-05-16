@@ -134,14 +134,8 @@ paths:
               $ref: "#/components/schemas/FilledPoll"
         required: true
       responses:
-        202:
+        200:
           description: Answers submitted succesfully.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Answer"
         400:
           description: Invalid request.
     get:
