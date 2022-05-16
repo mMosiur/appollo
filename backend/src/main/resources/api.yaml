@@ -285,7 +285,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserProfileView"
+                $ref: "#/components/schemas/UserDisplayProfile"
         401:
           description: User not authenticated.
         404:
@@ -465,7 +465,7 @@ components:
           example: flpanda98@site.com
         user_details:
           $ref: "#/components/schemas/UserDetails"
-    UserProfileView:
+    UserDisplayProfile:
       allOf:
         - type: object
           properties:
