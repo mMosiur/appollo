@@ -138,6 +138,8 @@ paths:
           description: Answers submitted succesfully.
         400:
           description: Invalid request.
+        409:
+          description: Conflict - poll no longer active.
     get:
       description: Get answer submits for a poll of a given id.
       operationId: getAnswersToPollById
