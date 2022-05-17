@@ -194,16 +194,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-    get:
-      description: Get all users.
-      operationId: getAllUsers
-      responses:
-        200:
-          description: A list of all users.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UserList"
   # Endpoint dedicated to browsing and management of specific users
   /users/{id}:
     get:
@@ -506,24 +496,6 @@ components:
         password:
           type: string
           example: Securepassword1337!
-    # User indexing
-    UserList:
-      type: object
-      properties:
-        users:
-          type: array
-          items:
-            $ref: "#/components/schemas/UserListRecord"
-    UserListRecord:
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 1234
-          readOnly: true
-        username:
-          type: string
-          example: FlyingPanda98
     # ==OTHER SCHEMAS==
     # Utility
     Error:
