@@ -3,7 +3,7 @@ package org.umcs.appollo.model;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
+@Entity(name = "User")
 @Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = "email"), @UniqueConstraint(columnNames = "username")})
 public class UserEntity {
     @Id

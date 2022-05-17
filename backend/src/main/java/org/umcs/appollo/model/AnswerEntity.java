@@ -2,7 +2,7 @@ package org.umcs.appollo.model;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "Answer")
 public class AnswerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
