@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: ApPOLLo backend API
   description: ApPOLLo API enables creation and management of polls, answers and app's users.
-  version: 0.0.1
+  version: 0.0.2
 paths:
   # Endpoint dedicated to creation and browsing of all polls
   /polls:
@@ -13,7 +13,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Poll'
+              $ref: "#/components/schemas/Poll"
         required: true
       responses:
         201:
@@ -21,7 +21,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Poll'
+                $ref: "#/components/schemas/Poll"
         400:
           description: Invalid request.
     get:
@@ -33,7 +33,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PollList'
+                $ref: "#/components/schemas/PollList"
   # Endpoint dedicated to view and management of a specific existing poll
   /polls/{id}:
     get:
@@ -55,7 +55,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Poll'
+                $ref: "#/components/schemas/Poll"
         404:
           description: Poll not found.
     put:
@@ -75,7 +75,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Poll'
+              $ref: "#/components/schemas/Poll"
         required: true
       responses:
         200:
@@ -83,7 +83,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Poll'
+                $ref: "#/components/schemas/Poll"
         401:
           description: User not authenticated.
         403:
@@ -112,7 +112,7 @@ paths:
           description: User not authorized to delete this poll.
         404:
           description: Poll not found.
-  # Endpoint dedicated to submitting user answers to a specific active poll.
+  # Endpoint dedicated to submitting user answers and browsing answers submitted so far
   /polls/{id}/answers:
     post:
       description: Add a set of user submitted answers to the given poll.
@@ -131,21 +131,223 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FilledPoll'
+              $ref: "#/components/schemas/FilledPoll"
         required: true
       responses:
-        202:
+        201:
           description: Answers submitted succesfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FilledPoll"
+        400:
+          description: Invalid request.
+        404:
+          description: Poll doesn't exist.
+        409:
+          description: Conflict - poll no longer active.
+    get:
+      description: Get answer submits for a poll of a given id.
+      operationId: getAnswersToPollById
+      parameters:
+        - name: id
+          description: Id of the target poll.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      responses:
+        200:
+          description: A list of answer submits.
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Answer'
+                  $ref: "#/components/schemas/FilledPollList"
+        401:
+          description: User not authenticated.
+        403:
+          description: User not authorized to browse answers to this poll.
+  # Endpoint dedicated to creation and browsing of users
+  /users:
+    post:
+      description: Create a new user.
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+        required: true
+      responses:
+        201:
+          description: User created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
         400:
-          description: Invalid request.
+          description: Invalid request. Could be due to invalid username/password/email.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  # Endpoint dedicated to browsing and management of specific users
+  /users/{id}:
+    get:
+      description: Get user of a given id.
+      operationId: getUserById
+      parameters:
+        - name: id
+          description: Id of the requested user.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      responses:
+        200:
+          description: A user object of a given id.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        401:
+          description: User not authenticated.
+        403:
+          description: User not authorized to view this user.
+        404:
+          description: User not found.
+    put:
+      description: Edit user of a given id.
+      operationId: editUserById
+      parameters:
+        - name: id
+          description: Id of the edited user.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+        required: true
+      responses:
+        200:
+          description: A user object of a given id.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        401:
+          description: User not authenticated.
+        403:
+          description: User not authorized to edit this user.
+        404:
+          description: User not found.
+  # Endpoint dedicated to browsing of user display profiles
+  /users/{id}/profile:
+    get:
+      description: Get profile for user of a given id.
+      operationId: getUserProfileById
+      parameters:
+        - name: id
+          description: Id of the requested users profile.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      responses:
+        200:
+          description: A user profile of a given id.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDisplayProfile"
+        401:
+          description: User not authenticated.
+        404:
+          description: User not found.
+  # Endpoints dedicated to user login/logout operations
+  /users/login:
+    post:
+      description: Login a user.
+      operationId: loginUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserLoginAttempt"
+        required: true
+      responses:
+        200:
+          description: User successfully logged in.
+        400:
+          description: Invalid request. Could be due to invalid username/password.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /users/logout:
+    post:
+      description: Logout current user.
+      operationId: logoutUser
+      responses:
+        default:
+          description: User successfully logged out.
 components:
   schemas:
+    # ==POLL RELATED SCHEMAS==
+    # Polls
+    Poll:
+      type: object
+      required:
+        - id
+        - questions
+      properties:
+        id:
+          type: integer
+          example: 1234
+          readOnly: true
+        name:
+          type: string
+          default: Poll
+          example: Favorite things poll
+        is_active:
+          type: boolean
+          default: true
+          readOnly: true
+        questions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Question"
+    FilledPoll:
+      type: object
+      required:
+        - poll_id
+        - answers
+      properties:
+        poll_id:
+          type: integer
+          example: 1234
+        answers:
+          type: array
+          items:
+            $ref: "#/components/schemas/Answer"
     # Poll components
     Question:
       type: object
@@ -196,50 +398,14 @@ components:
           type: string
           example: Blue
           description: Answer text (possibly a JSON object).
-    # Polls
-    Poll:
-      type: object
-      required:
-        - id
-        - questions
-      properties:
-        id:
-          type: integer
-          example: 1234
-          readOnly: true
-        name:
-          type: string
-          default: Poll
-          example: Favorite things poll
-        is_active:
-          type: boolean
-          default: true
-          readOnly: true
-        questions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Question'
-    FilledPoll:
-      type: object
-      required:
-        - poll_id
-        - answers
-      properties:
-        poll_id:
-          type: integer
-          example: 1234
-        answers:
-          type: array
-          items:
-            $ref: '#/components/schemas/Answer'
-    # Poll accessing
+    # Poll indexing
     PollList:
       type: object
       properties:
         polls:
           type: array
           items:
-            $ref: '#/components/schemas/PollListRecord'
+            $ref: "#/components/schemas/PollListRecord"
     PollListRecord:
       type: object
       properties:
@@ -250,3 +416,97 @@ components:
         name:
           type: string
           example: Favorite things poll
+    # Answer submits indexing
+    FilledPollList:
+      type: object
+      properties:
+        filledPolls:
+          type: array
+          items:
+            $ref: "#/components/schemas/FilledPollListRecord"
+    FilledPollListRecord:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1234
+          readOnly: true
+    # ==USER RELATED SCHEMAS==
+    # User
+    User:
+      type: object
+      required:
+        - id
+        - username
+        - password
+        - email
+        - user_details
+      properties:
+        id:
+          type: integer
+          example: 1234
+          readOnly: true
+        username:
+          type: string
+          example: FlyingPanda98
+        password:
+          type: string
+          example: Securepassword1337!
+        email:
+          type: string
+          example: flpanda98@site.com
+        user_details:
+          $ref: "#/components/schemas/UserDetails"
+    UserDisplayProfile:
+      allOf:
+        - type: object
+          properties:
+            username:
+              type: string
+              example: FlyingPanda98
+        - $ref: "#/components/schemas/UserDetails"
+    UserDetails:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          example: 1234
+          readOnly: true
+        age:
+          type: integer
+          example: 24
+          default: -1
+        sex:
+          type: string
+          example: male
+          enum:
+            - male
+            - female
+            - unspecified
+          default: unspecified
+    UserLoginAttempt:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: FlyingPanda98
+        password:
+          type: string
+          example: Securepassword1337!
+    # ==OTHER SCHEMAS==
+    # Utility
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
