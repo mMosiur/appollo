@@ -45,7 +45,7 @@ public class PollService {
 
     public PollEntity createPoll(Poll poll) {
         PollEntity pollEntity = pollConverter.FromApiToEntity(poll);
-        if(pollEntity==null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poll not found");
+        if(pollEntity==null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Poll not found");
         for(QuestionEntity question : pollEntity.getQuestions()) question.setPoll(pollEntity);
         pollEntity = pollRepository.save(pollEntity);
         pollEntity.setQuestions(
