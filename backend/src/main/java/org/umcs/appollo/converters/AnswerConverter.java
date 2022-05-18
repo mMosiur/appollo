@@ -1,13 +1,8 @@
 package org.umcs.appollo.converters;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import org.umcs.appollo.model.AnswerEntity;
-import org.umcs.appollo.model.QuestionEntity;
 import org.umcs.appollo.model.api.Answer;
-
-import java.util.Optional;
 
 @Service
 public class AnswerConverter {
