@@ -21,15 +21,12 @@ public class AnswerConverter {
         return answer;
     }
 
-    public AnswerEntity FromApiToEntity(Answer answer, Optional<QuestionEntity> questionId) {
+    public AnswerEntity FromApiToEntity(Answer answer) {
         if (answer == null)
             return null;
-        if(questionId.isEmpty())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Question not found");
         AnswerEntity answerEntity = new AnswerEntity();
         answerEntity.setId(answer.getId());
         answerEntity.setAnswerJson(answer.getAnswerJson());
-        answerEntity.setQuestion(questionId.get());
         return answerEntity;
     }
 }
