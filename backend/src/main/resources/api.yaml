@@ -536,21 +536,21 @@ components:
       allOf:
         - $ref: "#/components/schemas/PollMetadata"
         - type: object
+          required:
+            - id
+            - questions
           properties:
+            id:
+              type: integer
+              example: 1234
+              readOnly: true
             questions:
               type: array
               items:
                 $ref: "#/components/schemas/Question"
     PollMetadata:
       type: object
-      required:
-        - id
-        - questions
       properties:
-        id:
-          type: integer
-          example: 1234
-          readOnly: true
         name:
           type: string
           default: Poll
