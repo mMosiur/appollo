@@ -294,7 +294,7 @@ paths:
               $ref: "#/components/schemas/UserLoginAttempt"
         required: true
       responses:
-        200:
+        204:
           description: User successfully logged in.
         400:
           description: Invalid request. Could be due to invalid username/password.
