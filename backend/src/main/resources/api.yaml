@@ -454,7 +454,7 @@ paths:
         404:
           description: User not found.
     delete:
-      description: Delete user of a given id
+      description: Delete user of a given id.
       operationId: deleteUserById
       parameters:
         - name: user_id
