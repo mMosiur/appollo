@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: ApPOLLo backend API
   description: ApPOLLo API enables creation and management of polls, answers and app's users.
-  version: 0.0.2
+  version: 0.0.3
 paths:
   # Endpoint dedicated to creation and browsing of all polls
   /polls:
