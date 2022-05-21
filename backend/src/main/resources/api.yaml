@@ -104,7 +104,7 @@ paths:
             type: integer
             example: 1234
       responses:
-        200:
+        204:
           description: Poll successfully deleted.
         401:
           description: User not authenticated.
