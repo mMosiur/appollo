@@ -59,7 +59,7 @@ paths:
         404:
           description: Poll not found.
     put:
-      description: Update a poll of a given id.
+      description: Update metadata of a poll of a given id.
       operationId: updatePollById
       parameters:
         - name: id
@@ -75,7 +75,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Poll"
+              $ref: "#/components/schemas/PollMetadata"
         required: true
       responses:
         200:
@@ -314,6 +314,15 @@ components:
     # ==POLL RELATED SCHEMAS==
     # Polls
     Poll:
+      allOf:
+        - $ref: "#/components/schemas/PollMetadata"
+        - type: object
+          properties:
+            questions:
+              type: array
+              items:
+                $ref: "#/components/schemas/Question"
+    PollMetadata:
       type: object
       required:
         - id
@@ -331,10 +340,6 @@ components:
           type: boolean
           default: true
           readOnly: true
-        questions:
-          type: array
-          items:
-            $ref: "#/components/schemas/Question"
     FilledPoll:
       type: object
       required:
