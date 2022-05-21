@@ -35,12 +35,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/PollList"
   # Endpoint dedicated to view and management of a specific existing poll
-  /polls/{id}:
+  /polls/{poll_id}:
     get:
       description: Get a poll of a given id.
       operationId: getPollById
       parameters:
-        - name: id
+        - name: poll_id
           description: Id of the requested poll.
           in: path
           required: true
@@ -59,10 +59,10 @@ paths:
         404:
           description: Poll not found.
     put:
-      description: Update metadata of a poll of a given id.
+      description: Update a poll of a given id.
       operationId: updatePollById
       parameters:
-        - name: id
+        - name: poll_id
           description: Id of the updated poll.
           in: path
           required: true
@@ -75,7 +75,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/PollMetadata"
+              $ref: "#/components/schemas/Poll"
         required: true
       responses:
         200:
@@ -94,7 +94,7 @@ paths:
       description: Remove a poll of a given id.
       operationId: deletePollById
       parameters:
-        - name: id
+        - name: poll_id
           description: Id of the deleted poll.
           in: path
           required: true
@@ -113,12 +113,12 @@ paths:
         404:
           description: Poll not found.
   # Endpoint dedicated to submitting user answers and browsing answers submitted so far
-  /polls/{id}/answers:
+  /polls/{poll_id}/answers:
     post:
       description: Add a set of user submitted answers to the given poll.
       operationId: submitAnswersToPollById
       parameters:
-        - name: id
+        - name: poll_id
           description: Id of the target poll.
           in: path
           required: true
@@ -150,7 +150,7 @@ paths:
       description: Get answer submits for a poll of a given id.
       operationId: getAnswersToPollById
       parameters:
-        - name: id
+        - name: poll_id
           description: Id of the target poll.
           in: path
           required: true
@@ -172,6 +172,203 @@ paths:
           description: User not authenticated.
         403:
           description: User not authorized to browse answers to this poll.
+  # Endpoint dedicated to view and management of poll's metadata
+  /polls/{poll_id}/metadata:
+    get:
+      description: Get metadata from a poll of a given id.
+      operationId: getPollMetadataById
+      parameters:
+        - name: poll_id
+          description: Id of the requested poll.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      responses:
+        200:
+          description: Metadata of a poll of a given id.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PollMetadata"
+        404:
+          description: Poll not found.
+    put:
+      description: Update metadata of a poll of a given id.
+      operationId: updatePollMetadataById
+      parameters:
+        - name: poll_id
+          description: Id of the updated poll.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PollMetadata"
+        required: true
+      responses:
+        200:
+          description: Poll successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Poll"
+        401:
+          description: User not authenticated.
+        403:
+          description: User not authorized to edit this poll.
+        404:
+          description: Poll not found.
+  # Endpoints dedicated to browsing and editing questions in a poll
+  /polls/{poll_id}/questions:
+    get:
+      description: Get a list of questions from a poll of a given id.
+      operationId: getQuestionsFromPollById
+      parameters:
+        - name: poll_id
+          description: Id of the requested poll.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      responses:
+        200:
+          description: List of questions from a poll of a given id.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionList"
+        404:
+          description: Poll not found.
+    post:
+      description: Replace current set of questions in a poll of a given id.
+      operationId: updateQuestionsForPollById
+      parameters:
+        - name: poll_id
+          description: Id of the requested poll.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuestionList"
+      responses:
+        200:
+          description: Poll successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Poll"
+        401:
+          description: User not authenticated.
+        403:
+          description: User not authorized to edit this poll.
+        404:
+          description: Poll not found.
+  /polls/{poll_id}/questions/{question_id}:
+    put:
+      description: Edit a question of a given id.
+      operationId: updateQuestionById
+      parameters:
+        - name: poll_id
+          description: Id of the requested poll.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+        - name: question_id
+          description: Id of the requested question.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Question"
+      responses:
+        200:
+          description: Question successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Question"
+        401:
+          description: User not authenticated.
+        403:
+          description: User not authorized to edit this question.
+        404:
+          # Error schema should specify whether poll_id or question_id was wrong
+          description: Resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        409:
+          description: Question not present in poll.
+    delete:
+      description: Remove a question of a given id from the poll.
+      operationId: removeQuestionFromPollById
+      parameters:
+        - name: poll_id
+          description: Id of the requested poll.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+        - name: question_id
+          description: Id of the requested question.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      responses:
+        204:
+          description: Question successfully removed from the poll.
+        401:
+          description: User not authenticated.
+        403:
+          description: User not authorized to edit this question.
+        404:
+          # Error schema message should specify whether poll_id or question_id was wrong
+          description: Resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        409:
+          description: Question not present in poll.
   # Endpoint dedicated to creation and browsing of users
   /users:
     post:
@@ -197,12 +394,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   # Endpoint dedicated to browsing and management of specific users
-  /users/{id}:
+  /users/{user_id}:
     get:
       description: Get user of a given id.
       operationId: getUserById
       parameters:
-        - name: id
+        - name: user_id
           description: Id of the requested user.
           in: path
           required: true
@@ -228,7 +425,7 @@ paths:
       description: Edit user of a given id.
       operationId: editUserById
       parameters:
-        - name: id
+        - name: user_id
           description: Id of the edited user.
           in: path
           required: true
@@ -279,12 +476,12 @@ paths:
         404:
           description: User not found.
   # Endpoint dedicated to browsing of user display profiles
-  /users/{id}/profile:
+  /users/{user_id}/profile:
     get:
       description: Get profile for user of a given id.
       operationId: getUserProfileById
       parameters:
-        - name: id
+        - name: user_id
           description: Id of the requested users profile.
           in: path
           required: true
@@ -443,6 +640,13 @@ components:
         name:
           type: string
           example: Favorite things poll
+    QuestionList:
+      type: object
+      properties:
+        polls:
+          type: array
+          items:
+            $ref: "#/components/schemas/Question"
     # Answer submits indexing
     FilledPollList:
       type: object
