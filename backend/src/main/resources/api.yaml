@@ -35,12 +35,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/PollList"
   # Endpoint dedicated to view and management of a specific existing poll
-  /polls/{poll_id}:
+  /polls/{id}:
     get:
       description: Get a poll of a given id.
       operationId: getPollById
       parameters:
-        - name: poll_id
+        - name: id
           description: Id of the requested poll.
           in: path
           required: true
@@ -62,7 +62,7 @@ paths:
       description: Update a poll of a given id.
       operationId: updatePollById
       parameters:
-        - name: poll_id
+        - name: id
           description: Id of the updated poll.
           in: path
           required: true
@@ -94,7 +94,7 @@ paths:
       description: Remove a poll of a given id.
       operationId: deletePollById
       parameters:
-        - name: poll_id
+        - name: id
           description: Id of the deleted poll.
           in: path
           required: true
@@ -113,12 +113,12 @@ paths:
         404:
           description: Poll not found.
   # Endpoint dedicated to submitting user answers and browsing answers submitted so far
-  /polls/{poll_id}/answers:
+  /polls/{id}/answers:
     post:
       description: Add a set of user submitted answers to the given poll.
       operationId: submitAnswersToPollById
       parameters:
-        - name: poll_id
+        - name: id
           description: Id of the target poll.
           in: path
           required: true
@@ -150,7 +150,7 @@ paths:
       description: Get answer submits for a poll of a given id.
       operationId: getAnswersToPollById
       parameters:
-        - name: poll_id
+        - name: id
           description: Id of the target poll.
           in: path
           required: true
@@ -197,12 +197,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   # Endpoint dedicated to browsing and management of specific users
-  /users/{user_id}:
+  /users/{id}:
     get:
       description: Get user of a given id.
       operationId: getUserById
       parameters:
-        - name: user_id
+        - name: id
           description: Id of the requested user.
           in: path
           required: true
@@ -228,7 +228,7 @@ paths:
       description: Edit user of a given id.
       operationId: editUserById
       parameters:
-        - name: user_id
+        - name: id
           description: Id of the edited user.
           in: path
           required: true
@@ -260,7 +260,7 @@ paths:
       description: Delete user of a given id.
       operationId: deleteUserById
       parameters:
-        - name: user_id
+        - name: id
           description: Id of the requested user.
           in: path
           required: true
@@ -279,12 +279,12 @@ paths:
         404:
           description: User not found.
   # Endpoint dedicated to browsing of user display profiles
-  /users/{user_id}/profile:
+  /users/{id}/profile:
     get:
       description: Get profile for user of a given id.
       operationId: getUserProfileById
       parameters:
-        - name: user_id
+        - name: id
           description: Id of the requested users profile.
           in: path
           required: true
@@ -528,14 +528,14 @@ components:
         $ref: "#/components/schemas/JsonPatchOperation"
     JsonPatchOperation:
       type: object
-      description: A JSONPatch document as defined by RFC 6902
+      description: A JSONPatch document as defined by RFC 6902.
       required:
         - "op"
         - "path"
       properties:
         op:
           type: string
-          description: The operation to be performed
+          description: The operation to be performed.
           enum:
             - "add"
             - "remove"
@@ -545,7 +545,7 @@ components:
             - "test"
         path:
           type: string
-          description: A JSON-Pointer
+          description: A JSON-Pointer.
         value:
           type: object
           description: The value to be used within the operations.
