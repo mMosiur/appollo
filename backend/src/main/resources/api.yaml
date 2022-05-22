@@ -58,7 +58,7 @@ paths:
                 $ref: "#/components/schemas/Poll"
         404:
           description: Poll not found.
-    put:
+    patch:
       description: Update a poll of a given id.
       operationId: updatePollById
       parameters:
@@ -172,62 +172,6 @@ paths:
           description: User not authenticated.
         403:
           description: User not authorized to browse answers to this poll.
-  # Endpoint dedicated to view and management of poll's metadata
-  /polls/{poll_id}/metadata:
-    get:
-      description: Get metadata from a poll of a given id.
-      operationId: getPollMetadataById
-      parameters:
-        - name: poll_id
-          description: Id of the requested poll.
-          in: path
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            example: 1234
-      responses:
-        200:
-          description: Metadata of a poll of a given id.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PollMetadata"
-        404:
-          description: Poll not found.
-    put:
-      description: Update metadata of a poll of a given id.
-      operationId: updatePollMetadataById
-      parameters:
-        - name: poll_id
-          description: Id of the updated poll.
-          in: path
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            example: 1234
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/PollMetadata"
-        required: true
-      responses:
-        200:
-          description: Poll successfully updated.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Poll"
-        401:
-          description: User not authenticated.
-        403:
-          description: User not authorized to edit this poll.
-        404:
-          description: Poll not found.
   # Endpoints dedicated to browsing and editing questions in a poll
   /polls/{poll_id}/questions:
     get:
@@ -252,7 +196,7 @@ paths:
                 $ref: "#/components/schemas/QuestionList"
         404:
           description: Poll not found.
-    post:
+    put:
       description: Replace current set of questions in a poll of a given id.
       operationId: updateQuestionsForPollById
       parameters:
@@ -533,24 +477,15 @@ components:
     # ==POLL RELATED SCHEMAS==
     # Polls
     Poll:
-      allOf:
-        - $ref: "#/components/schemas/PollMetadata"
-        - type: object
-          required:
-            - id
-            - questions
-          properties:
-            id:
-              type: integer
-              example: 1234
-              readOnly: true
-            questions:
-              type: array
-              items:
-                $ref: "#/components/schemas/Question"
-    PollMetadata:
       type: object
+      required:
+        - id
+        - questions
       properties:
+        id:
+          type: integer
+          example: 1234
+          readOnly: true
         name:
           type: string
           default: Poll
@@ -559,6 +494,10 @@ components:
           type: boolean
           default: true
           readOnly: true
+        questions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Question"
     FilledPoll:
       type: object
       required:
