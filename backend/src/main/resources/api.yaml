@@ -198,7 +198,7 @@ paths:
           description: Poll not found.
     put:
       description: Replace current set of questions in a poll of a given id.
-      operationId: updateQuestionsForPollById
+      operationId: replaceQuestionsInPollById
       parameters:
         - name: poll_id
           description: Id of the requested poll.
@@ -227,22 +227,12 @@ paths:
           description: User not authorized to edit this poll.
         404:
           description: Poll not found.
-  /polls/{poll_id}/questions/{question_id}:
-    put:
-      description: Edit a question of a given id.
-      operationId: updateQuestionById
+    patch:
+      description: Modify current set of questions in a poll of a given id.
+      operationId: updateQuestionsInPollById
       parameters:
         - name: poll_id
           description: Id of the requested poll.
-          in: path
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            example: 1234
-        - name: question_id
-          description: Id of the requested question.
           in: path
           required: true
           style: simple
@@ -254,65 +244,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Question"
+              $ref: "#/components/schemas/JsonPatchRequest"
       responses:
         200:
-          description: Question successfully updated.
+          description: Poll successfully updated.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Question"
+                $ref: "#/components/schemas/Poll"
         401:
           description: User not authenticated.
         403:
-          description: User not authorized to edit this question.
+          description: User not authorized to edit this poll.
         404:
-          # Error schema should specify whether poll_id or question_id was wrong
-          description: Resource not found.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        409:
-          description: Question not present in poll.
-    delete:
-      description: Remove a question of a given id from the poll.
-      operationId: removeQuestionFromPollById
-      parameters:
-        - name: poll_id
-          description: Id of the requested poll.
-          in: path
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            example: 1234
-        - name: question_id
-          description: Id of the requested question.
-          in: path
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            example: 1234
-      responses:
-        204:
-          description: Question successfully removed from the poll.
-        401:
-          description: User not authenticated.
-        403:
-          description: User not authorized to edit this question.
-        404:
-          # Error schema message should specify whether poll_id or question_id was wrong
-          description: Resource not found.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        409:
-          description: Question not present in poll.
+          description: Poll not found.
   # Endpoint dedicated to creation and browsing of users
   /users:
     post:
