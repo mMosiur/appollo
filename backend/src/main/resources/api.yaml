@@ -438,13 +438,6 @@ components:
         name:
           type: string
           example: Favorite things poll
-    QuestionList:
-      type: object
-      properties:
-        polls:
-          type: array
-          items:
-            $ref: "#/components/schemas/Question"
     # Answer submits indexing
     FilledPollList:
       type: object
