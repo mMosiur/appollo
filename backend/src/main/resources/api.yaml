@@ -75,7 +75,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Poll"
+              $ref: "#/components/schemas/JsonPatchRequest"
         required: true
       responses:
         200:
