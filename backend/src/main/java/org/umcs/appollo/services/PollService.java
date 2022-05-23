@@ -6,10 +6,8 @@ import org.springframework.web.server.ResponseStatusException;
 import org.umcs.appollo.converters.PollConverter;
 import org.umcs.appollo.model.PollEntity;
 import org.umcs.appollo.model.QuestionEntity;
-import org.umcs.appollo.model.api.Poll;
-import org.umcs.appollo.model.api.PollList;
-import org.umcs.appollo.model.api.PollListRecord;
-import org.umcs.appollo.model.api.PollList;
+import org.umcs.appollo.model.api.PollDetails;
+import org.umcs.appollo.model.api.PollLabel;
 import org.umcs.appollo.repository.PollRepository;
 import org.umcs.appollo.repository.QuestionRepository;
 import java.util.List;
@@ -22,56 +20,65 @@ public class PollService {
     private final PollConverter pollConverter;
     private final QuestionRepository questionRepository;
 
-    public PollService(PollRepository pollRepository, PollConverter pollConverter, QuestionRepository questionRepository) {
+    public PollService(PollRepository pollRepository, PollConverter pollConverter,
+            QuestionRepository questionRepository) {
         this.pollRepository = pollRepository;
         this.pollConverter = pollConverter;
         this.questionRepository = questionRepository;
     }
 
-    public PollList getPolls() {
-        List<PollListRecord> pollListRecords = pollRepository.findAll()
-            .stream()
-            .map(pollConverter::FromEntityToApiListRecord)
-            .collect(Collectors.toList());
-        PollList list = new PollList();
-        list.setPolls(pollListRecords);
-        return list;
+    public List<PollLabel> getPolls() {
+        List<PollLabel> pollList = pollRepository
+                .findAll()
+                .stream()
+                .map(pollConverter::FromEntityToApi)
+                .collect(Collectors.toList());
+        return pollList;
     }
 
-    public Poll getPoll(Integer id) {
+    public PollDetails getPoll(Integer id) {
         Optional<PollEntity> result = pollRepository.findById(id);
-        if(result.isEmpty())
+        if (result.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poll with id " + id + " not found.");
 
         PollEntity pollEntity = result.get();
-        return pollConverter.FromEntityToApi(pollEntity);
+        return pollConverter.FromEntityToApiDetailed(pollEntity);
     }
 
-    public PollEntity createPoll(Poll poll) {
+    public PollEntity createPoll(PollDetails poll) {
         PollEntity pollEntity = pollConverter.FromApiToEntity(poll);
-        if(pollEntity==null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Poll not found");
-        for(QuestionEntity question : pollEntity.getQuestions()) question.setPoll(pollEntity);
+        if (pollEntity == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Poll not found");
+        for (QuestionEntity question : pollEntity.getQuestions())
+            question.setPoll(pollEntity);
         pollEntity = pollRepository.save(pollEntity);
         pollEntity.setQuestions(
-            questionRepository.saveAll(pollEntity.getQuestions())
-        );
+                questionRepository.saveAll(pollEntity.getQuestions()));
         return pollEntity;
     }
 
-    public Poll updatePoll(Integer id, Poll updatedPoll) {
-        Optional<PollEntity> result = pollRepository.findById(id);
-        if(result.isEmpty())
+    public void deletePoll(Integer id) {
+        PollEntity poll = pollRepository.getById(id);
+        if (poll == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poll with id " + id + " not found.");
-        PollEntity updatedPollEntity = pollConverter.FromApiToEntity(updatedPoll);
-        updatedPollEntity.setId(id);
-        for(QuestionEntity question : updatedPollEntity.getQuestions()) question.setPoll(updatedPollEntity);
-        updatedPollEntity = pollRepository.save(updatedPollEntity);
-        updatedPollEntity.setQuestions(
-            questionRepository.saveAll(updatedPollEntity.getQuestions())
-        );
-        updatedPoll = pollConverter.FromEntityToApi(updatedPollEntity);
-        return updatedPoll;
+        }
+        pollRepository.delete(poll);
     }
 
-   // TODO: 18.05.2022  delete endpoint service
+    public PollDetails updatePoll(Integer id, PollDetails newPoll) {
+        if (pollRepository.getById(id) == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poll with id " + id + " not found.");
+        }
+        PollEntity newPollEntity = pollConverter.FromApiToEntity(newPoll);
+        if (newPollEntity == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Poll not found");
+        }
+        for (QuestionEntity question : newPollEntity.getQuestions())
+            question.setPoll(newPollEntity);
+        newPollEntity.setId(id);
+        newPollEntity = pollRepository.save(newPollEntity);
+        newPollEntity.setQuestions(
+                questionRepository.saveAll(newPollEntity.getQuestions()));
+        return pollConverter.FromEntityToApiDetailed(newPollEntity);
+    }
 }

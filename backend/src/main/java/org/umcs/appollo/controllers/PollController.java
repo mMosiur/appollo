@@ -1,24 +1,19 @@
 package org.umcs.appollo.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.server.ResponseStatusException;
 import org.umcs.appollo.api.PollsApi;
 import org.umcs.appollo.model.PollEntity;
-import org.umcs.appollo.model.api.Answer;
-import org.umcs.appollo.model.api.FilledPoll;
-import org.umcs.appollo.model.api.FilledPollList;
-import org.umcs.appollo.model.api.Poll;
-import org.umcs.appollo.model.api.PollList;
+import org.umcs.appollo.model.api.AnswerDetails;
+import org.umcs.appollo.model.api.PollDetails;
+import org.umcs.appollo.model.api.PollLabel;
 import org.umcs.appollo.services.AnswersService;
 import org.umcs.appollo.services.PollService;
-
 
 @RestController
 public class PollController implements PollsApi {
@@ -32,7 +27,7 @@ public class PollController implements PollsApi {
     }
 
     @Override
-    public ResponseEntity<Poll> createPoll(@Valid Poll poll) {
+    public ResponseEntity<PollDetails> createPoll(@Valid PollDetails poll) {
         PollEntity createdPool;
         try{
             createdPool = pollService.createPoll(poll);
@@ -41,62 +36,70 @@ public class PollController implements PollsApi {
             throw new RuntimeException(ex.getMessage());
         }
         return ResponseEntity.ok().body(pollService.getPoll(createdPool.getId()));
-
     }
 
     @Override
     public ResponseEntity<Void> deletePollById(Integer id) {
-        // TODO Auto-generated method stub
-        return PollsApi.super.deletePollById(id);
+        try{
+            pollService.deletePoll(id);
+        }catch(ResponseStatusException ex){
+            throw new RuntimeException(ex.getMessage());
+        }
+        return ResponseEntity.noContent().build();
     }
 
     @Override
-    public ResponseEntity<List<FilledPollList>> getAnswersToPollById(Integer id) {
-        // TODO Auto-generated method stub
-        return PollsApi.super.getAnswersToPollById(id);
+    public ResponseEntity<List<AnswerDetails>> getAnswersToPollById(Integer id) {
+        List<AnswerDetails> answers;
+        try{
+            answers = answersService.getAnswersForPoll(id);
+        }catch(ResponseStatusException ex){
+            throw new RuntimeException(ex.getMessage());
+        }
+        return ResponseEntity.ok().body(answers);
     }
 
     @Override
-    public ResponseEntity<Poll> getPollById(Integer id) {
-        Poll poll;
+    public ResponseEntity<PollDetails> getPollById(Integer id) {
+        PollDetails poll;
         try{
             poll = pollService.getPoll(id);
-        }catch(ResponseStatusException  ex){
+
+        }catch(ResponseStatusException ex){
             throw new RuntimeException(ex.getMessage());
         }
         return ResponseEntity.ok().body(poll);
     }
 
     @Override
-    public ResponseEntity<PollList> getPolls() {
-        PollList polls;
-        try{
+    public ResponseEntity<List<PollLabel>> getPolls() {
+        List<PollLabel> polls;
+        try {
             polls = pollService.getPolls();
-        }catch(ResponseStatusException ex){
+        } catch(ResponseStatusException ex) {
             throw new RuntimeException(ex.getMessage());
         }
         return ResponseEntity.ok().body(polls);
     }
 
     @Override
-    public ResponseEntity<FilledPoll> submitAnswersToPollById(Integer id, @Valid FilledPoll filledPoll) {
-        List<Answer> addedAnswers;
-        try{
-            addedAnswers = answersService.addPollAnswers(id, filledPoll);
-        }catch(RuntimeException ex){
-                throw new RuntimeException(ex.getMessage());
+    public ResponseEntity<List<AnswerDetails>> submitAnswersToPollById(Integer id, @Valid List<AnswerDetails> filledPoll) {
+        List<AnswerDetails> addPollAnswers;
+        try {
+            addPollAnswers = answersService.addPollAnswers(id, filledPoll);
+        } catch(ResponseStatusException ex) {
+            throw new RuntimeException(ex.getMessage());
         }
-        return ResponseEntity.ok().body(filledPoll);
+        return ResponseEntity.ok().body(addPollAnswers);
     }
 
     @Override
-    public ResponseEntity<Poll> updatePollById(Integer id, @Valid Poll poll) {
-        try{
-            poll = pollService.updatePoll(id, poll);
-        }catch(ResponseStatusException ex){
+    public ResponseEntity<PollDetails> updatePoll(Integer id, @Valid PollDetails pollDetails) {
+        try {
+            pollDetails = pollService.updatePoll(id, pollDetails);
+        } catch(ResponseStatusException ex) {
             throw new RuntimeException(ex.getMessage());
         }
-        return ResponseEntity.ok().body(poll);
+        return ResponseEntity.ok().body(pollDetails);
     }
-    
 }
