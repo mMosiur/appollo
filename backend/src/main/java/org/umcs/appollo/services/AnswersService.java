@@ -31,17 +31,14 @@ public class AnswersService {
     }
 
     public List<Answer> addPollAnswers(Integer id, FilledPoll filledPoll) {
+        if (filledPoll.getPollId() != id) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Poll id from path and body did not match.");
+        }
         Optional<PollEntity> result = pollRepository.findById(id);
         List<AnswerEntity> answers;
         try {
             if (result.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poll with id " + id + " not found.");
-            }
-
-            result = pollRepository.findById(filledPoll.getPollId());
-            if (result.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Poll with id " + filledPoll.getPollId() + " not found.");
             }
 
             answers = filledPoll.getAnswers()
@@ -56,7 +53,8 @@ public class AnswersService {
         return answers.stream().map(a -> answerConverter.FromEntityToApi(a)).collect(Collectors.toList());
     }
 
-    // Is this really needed? Isn't ID enough? To do: test it after controller is in place.
+    // Is this really needed? Isn't ID enough? To do: test it after controller is in
+    // place.
     private AnswerEntity enrichAnswerWithQuestionInfo(Answer a) {
         AnswerEntity answer = answerConverter.FromApiToEntity(a);
         Integer questionId = a.getQuestionId();
