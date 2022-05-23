@@ -7,6 +7,9 @@ import org.umcs.appollo.converters.PollConverter;
 import org.umcs.appollo.model.PollEntity;
 import org.umcs.appollo.model.QuestionEntity;
 import org.umcs.appollo.model.api.Poll;
+import org.umcs.appollo.model.api.PollList;
+import org.umcs.appollo.model.api.PollListRecord;
+import org.umcs.appollo.model.api.PollList;
 import org.umcs.appollo.repository.PollRepository;
 import org.umcs.appollo.repository.QuestionRepository;
 import java.util.List;
@@ -25,12 +28,14 @@ public class PollService {
         this.questionRepository = questionRepository;
     }
 
-    public List<Poll> getPolls() {
-        List<Poll> polls = pollRepository.findAll()
+    public PollList getPolls() {
+        List<PollListRecord> pollListRecords = pollRepository.findAll()
             .stream()
-            .map(pollConverter::FromEntityToApi)
+            .map(pollConverter::FromEntityToApiListRecord)
             .collect(Collectors.toList());
-        return polls;
+        PollList list = new PollList();
+        list.setPolls(pollListRecords);
+        return list;
     }
 
     public Poll getPoll(Integer id) {

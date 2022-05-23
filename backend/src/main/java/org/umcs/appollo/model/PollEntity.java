@@ -14,7 +14,7 @@ public class PollEntity {
     private String name;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = true)
     private UserEntity user;
 
     @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL)

@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.umcs.appollo.converters.AnswerConverter;
 import org.umcs.appollo.model.AnswerEntity;
@@ -16,6 +17,7 @@ import org.umcs.appollo.repository.PollRepository;
 import org.umcs.appollo.repository.QuestionRepository;
 import org.umcs.appollo.model.api.FilledPoll;
 
+@Service
 public class AnswersService {
     private final PollRepository pollRepository;
     private final AnswerRepository answerRepository;

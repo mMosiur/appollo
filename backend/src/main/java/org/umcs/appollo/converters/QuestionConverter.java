@@ -19,7 +19,7 @@ public class QuestionConverter {
         Question question = new Question();
         question.setId(questionEntity.getId());
         question.setText(questionEntity.getText());
-        Question.TypeEnum type = Question.TypeEnum.valueOf(questionEntity.getType());
+        Question.TypeEnum type = Question.TypeEnum.valueOf(questionEntity.getType().toUpperCase());
         question.setType(type);
         List<String> options = gson.fromJson(
             questionEntity.getOptions(),
