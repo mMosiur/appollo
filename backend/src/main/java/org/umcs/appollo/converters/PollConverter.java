@@ -1,9 +1,11 @@
 package org.umcs.appollo.converters;
+
 import org.springframework.stereotype.Service;
 import org.umcs.appollo.model.PollEntity;
 import org.umcs.appollo.model.QuestionEntity;
-import org.umcs.appollo.model.api.Poll;
-import org.umcs.appollo.model.api.Question;
+import org.umcs.appollo.model.api.PollDetails;
+import org.umcs.appollo.model.api.PollLabel;
+import org.umcs.appollo.model.api.QuestionDetails;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,12 +18,22 @@ public class PollConverter {
         this.questionConverter = questionConverter;
     }
 
-    public Poll FromEntityToApi(PollEntity pollEntity) {
+    public PollLabel FromEntityToApi(PollEntity pollEntity) {
+        if (pollEntity == null) {
+            return null;
+        }
+        PollLabel result = new PollLabel();
+        result.setId(pollEntity.getId());
+        result.setName(pollEntity.getName());
+        return result;
+    }
+
+    public PollDetails FromEntityToApiDetailed(PollEntity pollEntity) {
         if (pollEntity == null)
             return null;
-        Poll poll = new Poll();
+            PollDetails poll = new PollDetails();
         poll.setId(pollEntity.getId());
-        List<Question> questions = pollEntity.getQuestions()
+        List<QuestionDetails> questions = pollEntity.getQuestions()
                 .stream()
                 .map(questionConverter::FromEntityToApi)
                 .collect(Collectors.toList());
@@ -30,7 +42,7 @@ public class PollConverter {
         return poll;
     }
 
-    public PollEntity FromApiToEntity(Poll poll) {
+    public PollEntity FromApiToEntity(PollDetails poll) {
         if (poll == null)
             return null;
         PollEntity pollEntity = new PollEntity();

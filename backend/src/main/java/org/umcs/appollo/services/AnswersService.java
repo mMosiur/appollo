@@ -1,5 +1,6 @@
 package org.umcs.appollo.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -11,11 +12,10 @@ import org.umcs.appollo.converters.AnswerConverter;
 import org.umcs.appollo.model.AnswerEntity;
 import org.umcs.appollo.model.PollEntity;
 import org.umcs.appollo.model.QuestionEntity;
-import org.umcs.appollo.model.api.Answer;
+import org.umcs.appollo.model.api.AnswerDetails;
 import org.umcs.appollo.repository.AnswerRepository;
 import org.umcs.appollo.repository.PollRepository;
 import org.umcs.appollo.repository.QuestionRepository;
-import org.umcs.appollo.model.api.FilledPoll;
 
 @Service
 public class AnswersService {
@@ -32,32 +32,42 @@ public class AnswersService {
         this.questionRepository = questionRepository;
     }
 
-    public List<Answer> addPollAnswers(Integer id, FilledPoll filledPoll) {
-        if (filledPoll.getPollId() != id) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Poll id from path and body did not match.");
+    public List<AnswerDetails> getAnswersForPoll(Integer pollId) {
+        Optional<PollEntity> result = pollRepository.findById(pollId);
+        if (result.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poll with id " + pollId + " not found.");
         }
+        List<AnswerDetails> answers = new ArrayList<AnswerDetails>();
+        for(QuestionEntity question : result.get().getQuestions()) {
+            for(AnswerEntity answer : question.getAnswers()) {
+                answers.add(answerConverter.FromEntityToApi(answer));
+            }
+        }
+        return answers;
+    }
+
+    public List<AnswerDetails> addPollAnswers(Integer id, List<AnswerDetails> answers) {
         Optional<PollEntity> result = pollRepository.findById(id);
-        List<AnswerEntity> answers;
+        List<AnswerEntity> answersEntities;
         try {
             if (result.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poll with id " + id + " not found.");
             }
-
-            answers = filledPoll.getAnswers()
-                    .stream()
-                    .map(q -> enrichAnswerWithQuestionInfo(q))
-                    .collect(Collectors.toList());
-            answers = answerRepository.saveAll(answers);
+            answersEntities = answers
+                .stream()
+                .map(q -> enrichAnswerWithQuestionInfo(q))
+                .collect(Collectors.toList());
+            answersEntities = answerRepository.saveAll(answersEntities);
         } catch (ResponseStatusException ex) {
             throw new RuntimeException(ex.getMessage());
         }
 
-        return answers.stream().map(a -> answerConverter.FromEntityToApi(a)).collect(Collectors.toList());
+        return answersEntities.stream().map(a -> answerConverter.FromEntityToApi(a)).collect(Collectors.toList());
     }
 
     // Is this really needed? Isn't ID enough? To do: test it after controller is in
     // place.
-    private AnswerEntity enrichAnswerWithQuestionInfo(Answer a) {
+    private AnswerEntity enrichAnswerWithQuestionInfo(AnswerDetails a) {
         AnswerEntity answer = answerConverter.FromApiToEntity(a);
         Integer questionId = a.getQuestionId();
         Optional<QuestionEntity> question = questionRepository.findById(questionId);
