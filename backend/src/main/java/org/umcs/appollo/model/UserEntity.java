@@ -26,6 +26,10 @@ public class UserEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "details_id")
+    private UserDetailsEntity details;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PollEntity> polls;
 
