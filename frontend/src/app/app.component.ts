@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Poll } from './poll';
+import data from './mock';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'appollo';
+  title = 'apPOLLo';
+  poll: Poll = data;
+
+  onClick() {
+    console.log(this.poll)
+  }
 }
