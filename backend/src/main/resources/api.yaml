@@ -280,31 +280,6 @@ paths:
           description: User not authorized to delete this user.
         '404':
           description: User not found.
-  /users/{id}/profile:
-    get:
-      description: Get profile for user of a given id.
-      operationId: getUserProfileById
-      parameters:
-        - name: id
-          description: Id of the requested users profile.
-          in: path
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            example: 1234
-      responses:
-        '200':
-          description: A user profile of a given id.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserDisplayProfile'
-        '401':
-          description: User not authenticated.
-        '404':
-          description: User not found.
   /users/login:
     post:
       description: Login a user.
@@ -318,19 +293,17 @@ paths:
       responses:
         '204':
           description: User successfully logged in.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: '312-5k234fddsl'
         '400':
           description: Invalid request. Could be due to invalid username/password.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /users/logout:
-    post:
-      description: Logout current user.
-      operationId: logoutUser
-      responses:
-        default:
-          description: User successfully logged out.
 components:
   schemas:
     PollDetails:
@@ -421,7 +394,7 @@ components:
         - username
         - password
         - email
-        - user_details
+        - role
       properties:
         id:
           type: integer
@@ -436,37 +409,10 @@ components:
         email:
           type: string
           example: flpanda98@site.com
-        user_details:
-          $ref: '#/components/schemas/UserDetails'
-    UserDisplayProfile:
-      allOf:
-        - type: object
-          properties:
-            username:
-              type: string
-              example: FlyingPanda98
-        - $ref: '#/components/schemas/UserDetails'
-    UserDetails:
-      type: object
-      required:
-        - id
-      properties:
-        id:
-          type: integer
-          example: 1234
-          readOnly: true
-        age:
-          type: integer
-          example: 24
-          default: -1
-        sex:
-          type: string
-          example: male
-          enum:
-            - male
-            - female
-            - unspecified
-          default: unspecified
+        role:
+          type: array
+          items:
+            type: string
     UserLoginAttempt:
       type: object
       required:

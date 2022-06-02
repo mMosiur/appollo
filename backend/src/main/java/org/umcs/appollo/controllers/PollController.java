@@ -1,10 +1,7 @@
 package org.umcs.appollo.controllers;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.umcs.appollo.api.PollsApi;
@@ -15,11 +12,15 @@ import org.umcs.appollo.model.api.PollLabel;
 import org.umcs.appollo.services.AnswersService;
 import org.umcs.appollo.services.PollService;
 
+import javax.validation.Valid;
+import java.util.List;
+
 @RestController
+@RequestMapping("/api/")
 public class PollController implements PollsApi {
 
-    private PollService pollService;
-    private AnswersService answersService;
+    private final PollService pollService;
+    private final AnswersService answersService;
 
     public PollController(PollService pollService, AnswersService answersService) {
         this.pollService = pollService;
