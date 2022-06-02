@@ -6,6 +6,7 @@ info:
     users.
   version: 0.0.3
 paths:
+  # Endpoint dedicated to creation and browsing of all polls
   /polls:
     post:
       description: Create a new poll.
@@ -37,6 +38,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/PollLabel'
+  # Endpoint dedicated to view and management of a specific existing poll
   /polls/{id}:
     get:
       description: Get a poll of a given id.
@@ -91,6 +93,38 @@ paths:
           description: User not authorized to delete this poll.
         '404':
           description: Poll not found
+    patch:
+      description: Update a poll of a given id.
+      operationId: updatePollById
+      parameters:
+        - name: id
+          description: Id of the updated poll.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JsonPatchRequest"
+        required: true
+      responses:
+        200:
+          description: Poll successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PollDetails"
+        401:
+          description: User not authenticated.
+        403:
+          description: User not authorized to edit this poll.
+        404:
+          description: Poll not found.
     delete:
       description: Remove a poll of a given id.
       operationId: deletePollById
@@ -113,6 +147,7 @@ paths:
           description: User not authorized to delete this poll.
         '404':
           description: Poll not found.
+  # Endpoint dedicated to submitting user answers and browsing answers submitted so far
   /polls/{id}/answers:
     post:
       description: Add a set of user submitted answers to the given poll.
@@ -176,6 +211,7 @@ paths:
           description: User not authenticated.
         '403':
           description: User not authorized to browse answers to this poll.
+  # Endpoint dedicated to creation and browsing of users
   /users:
     post:
       description: Create a new user.
@@ -199,6 +235,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  # Endpoint dedicated to browsing and management of specific users
   /users/{id}:
     get:
       description: Get user of a given id.
@@ -280,6 +317,7 @@ paths:
           description: User not authorized to delete this user.
         '404':
           description: User not found.
+  # Endpoint dedicated to browsing of user display profiles
   /users/{id}/profile:
     get:
       description: Get profile for user of a given id.
@@ -305,6 +343,7 @@ paths:
           description: User not authenticated.
         '404':
           description: User not found.
+  # Endpoints dedicated to user login/logout operations
   /users/login:
     post:
       description: Login a user.
@@ -333,16 +372,22 @@ paths:
           description: User successfully logged out.
 components:
   schemas:
+    # ==POLL RELATED SCHEMAS==
+    # Polls
     PollDetails:
       type: object
       required:
         - id
+        - owner_id
         - questions
       properties:
         id:
           type: integer
           example: 1234
           readOnly: true
+        owner_id:
+          type: integer
+          example: 1234
         name:
           type: string
           default: Poll
@@ -355,6 +400,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/QuestionDetails'
+    # Poll components
     QuestionDetails:
       type: object
       required:
@@ -404,6 +450,7 @@ components:
           type: string
           example: Blue
           description: Answer text (possibly a JSON object).
+    # Poll indexing
     PollLabel:
       type: object
       properties:
@@ -414,6 +461,7 @@ components:
         name:
           type: string
           example: Favorite things poll
+    # ==USER RELATED SCHEMAS==
     User:
       type: object
       required:
@@ -479,6 +527,61 @@ components:
         password:
           type: string
           example: Securepassword1337!
+    # ==UTILITY SCHEMAS==
+    JsonPatchRequest:
+      type: array
+      items:
+        $ref: "#/components/schemas/JsonPatchOperation"
+      example:
+        [
+          {
+            "op": "add",
+            "path": "/questions",
+            "value": "{
+              \"text\": \"What is your favorite color?\",
+              \"type\": \"radio\",
+              \"options\": [\"string\"]
+            }"
+          },
+          {
+            "op": "remove",
+            "path": "/polls/1234/questions/0"
+          },
+          {
+            "op": "move",
+            "from": "/polls/1234/questions/2",
+            "to": "/polls/1234/questions/1"
+          }
+        ]
+    JsonPatchOperation:
+      type: object
+      description: A JSONPatch document as defined by RFC 6902.
+      required:
+        - "op"
+        - "path"
+      properties:
+        op:
+          type: string
+          description: The operation to be performed.
+          example: replace
+          enum:
+            - "add"
+            - "remove"
+            - "replace"
+            - "move"
+            - "copy"
+            - "test"
+        path:
+          type: string
+          description: A JSON-Pointer.
+          example: name
+        value:
+          type: object
+          description: The value to be used within the operations.
+          example: The best poll!
+        from:
+          type: string
+          description: A string containing a JSON Pointer value.
     Error:
       type: object
       properties:
