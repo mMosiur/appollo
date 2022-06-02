@@ -1,11 +1,15 @@
 package org.umcs.appollo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.umcs.appollo.converters.UserConverter;
 import org.umcs.appollo.model.UserEntity;
 import org.umcs.appollo.model.api.User;
 import org.umcs.appollo.repository.UserRepository;
@@ -15,6 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Component
 @Service(value = "userService")
 public class UserServiceImpl implements UserDetailsService, UserService {
 
@@ -24,7 +29,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Autowired
     private  UserRepository userRepository;
 
-    // TODO: 02.06.2022 zrobic beansa do convertera
+    @Autowired
+    private UserConverter userConverter;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public UserServiceImpl(@Lazy BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
+
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity user = userRepository.findByUsername(username);
@@ -44,10 +57,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public User addNew(User user) {
-     //   UserEntity userEntity = userConverter.FromApiToEntity(user);
+        UserEntity userEntity = userConverter.FromApiToEntity(user);
         // TODO: 02.06.2022 Dodanie do repozytorium nowego uzytkownika
-    //    user = userConverter.FromEntityToApi(userEntity);
-          return user;
+        user = userConverter.FromEntityToApi(userEntity);
+        return user;
 
 
     }
@@ -62,7 +75,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public User findOne(String username) {
-        return null;// userConverter.FromEntityToApi(userRepository.findByUsername(username));
+        return userConverter.FromEntityToApi(userRepository.findByUsername(username));
     }
 
     @Override

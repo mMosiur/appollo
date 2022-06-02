@@ -3,6 +3,7 @@ package org.umcs.appollo.converters;
 import org.umcs.appollo.model.UserEntity;
 import org.umcs.appollo.model.api.User;
 
+
 public class UserConverter {
 
     public User FromEntityToApi(UserEntity userEntity) {
