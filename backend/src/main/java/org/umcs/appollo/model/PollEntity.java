@@ -1,8 +1,13 @@
 package org.umcs.appollo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.List;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Entity(name = "Poll")
 public class PollEntity {
     @Id
@@ -15,9 +20,11 @@ public class PollEntity {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = true)
+    @JsonBackReference
     private UserEntity user;
 
     @OneToMany(mappedBy = "poll", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<QuestionEntity> questions;
 
     public PollEntity() {

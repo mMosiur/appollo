@@ -1,5 +1,7 @@
 package org.umcs.appollo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -21,6 +23,7 @@ public class QuestionEntity {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name="poll_id", nullable = false)
+    @JsonBackReference
     private PollEntity poll;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)

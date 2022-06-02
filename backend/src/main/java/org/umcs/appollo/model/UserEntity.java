@@ -1,5 +1,7 @@
 package org.umcs.appollo.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -29,6 +31,7 @@ public class UserEntity {
     private UserDetailsEntity details;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<PollEntity> polls;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
