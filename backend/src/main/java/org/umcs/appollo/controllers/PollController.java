@@ -1,15 +1,18 @@
 package org.umcs.appollo.controllers;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.umcs.appollo.api.PollsApi;
 import org.umcs.appollo.model.PollEntity;
 import org.umcs.appollo.model.api.AnswerDetails;
+import org.umcs.appollo.model.api.JsonPatchOperation;
 import org.umcs.appollo.model.api.PollDetails;
 import org.umcs.appollo.model.api.PollLabel;
 import org.umcs.appollo.services.AnswersService;
@@ -101,5 +104,16 @@ public class PollController implements PollsApi {
             throw new RuntimeException(ex.getMessage());
         }
         return ResponseEntity.ok().body(pollDetails);
+    }
+
+    @Override
+    public ResponseEntity<PollDetails> updatePollById(Integer id, @Valid List<JsonPatchOperation> jsonPatchOperation) {
+        PollDetails pollPatched;
+        try {
+            pollPatched = pollService.updatePollById(id, jsonPatchOperation);
+        } catch (JsonPatchException | ResponseStatusException | IOException ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
+        return ResponseEntity.ok(pollPatched);
     }
 }
