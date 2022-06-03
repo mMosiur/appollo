@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/login", "/api/register").permitAll()
+                .antMatchers("/api/users/login", "/api/users").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers(format("%s/**", restApiDocPath)).permitAll()
                 .antMatchers(format("%s/**", swaggerPath)).permitAll()
@@ -52,10 +52,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
-        http.csrf().ignoringAntMatchers("/h2-console/**");
-        http.headers().frameOptions().sameOrigin();
-        http.logout();
+         http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+         http.headers().frameOptions().sameOrigin();
+         http.logout();
     }
 
     @Bean

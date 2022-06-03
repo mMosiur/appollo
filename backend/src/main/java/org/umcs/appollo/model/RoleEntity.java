@@ -3,7 +3,7 @@ package org.umcs.appollo.model;
 import javax.persistence.*;
 import java.util.Set;
 
-@Entity
+@Entity(name = "Role")
 public class RoleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
