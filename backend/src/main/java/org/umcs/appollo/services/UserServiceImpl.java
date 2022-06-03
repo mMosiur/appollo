@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public User findFirst(String username) {
+    public User findOne(String username) {
         User out = userConverter.FromEntityToApi(userRepository.findByUsername(username));
         if (out == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No user of name " + username + " found.");

@@ -7,7 +7,7 @@ import java.util.List;
 public interface UserService {
     User addNew(User user);
     List<User> findAll();
-    User findFirst(String username);
+    User findOne(String username);
     User findOne(int id);
     User edit(int id, User data);
     void delete(int id);
