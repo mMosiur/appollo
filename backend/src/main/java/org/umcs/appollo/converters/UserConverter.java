@@ -1,7 +1,10 @@
 package org.umcs.appollo.converters;
 
+import org.umcs.appollo.model.RoleEntity;
 import org.umcs.appollo.model.UserEntity;
 import org.umcs.appollo.model.api.User;
+
+import java.util.LinkedList;
 
 
 public class UserConverter {
@@ -9,17 +12,35 @@ public class UserConverter {
     public User FromEntityToApi(UserEntity userEntity) {
         if (userEntity == null)
             return null;
-        User result =  new User();
-        // TODO: 02.06.2022 user konwerter 2
-        return null;
 
+        User out = new User();
+        LinkedList<String> userRoles = new LinkedList<>();
+        for (RoleEntity role: userEntity.getRoles())
+            userRoles.add(role.getName());
 
+        out.setId(userEntity.getId());
+        out.setUsername(userEntity.getUsername());
+        out.setPassword(userEntity.getPassword());
+        out.setEmail(userEntity.getEmail());
+        out.setRole(userRoles);
 
+        return out;
     }
 
     public UserEntity FromApiToEntity(User user) {
-        // TODO: 02.06.2022 user konwerter 1
-        return null;
+        if (user == null)
+            return null;
 
+        UserEntity out = new UserEntity();
+
+        out.setId(user.getId());
+        out.setUsername(user.getUsername());
+        out.setPassword(user.getPassword());
+        out.setEmail(user.getEmail());
+        // None provided in user object
+//        out.setFirstName();
+//        out.setLastName();
+
+        return out;
     }
 }
