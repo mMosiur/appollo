@@ -8,7 +8,7 @@ import org.umcs.appollo.converters.UserConverter;
 
 @Configuration
 @ComponentScan(basePackageClasses = UserConverter.class)
-public class Config {
+public class BeansConfig {
     @Bean
     public UserConverter getAddress() {
         return new UserConverter();

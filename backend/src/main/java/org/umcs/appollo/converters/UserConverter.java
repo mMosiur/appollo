@@ -22,7 +22,8 @@ public class UserConverter {
         out.setUsername(userEntity.getUsername());
         out.setPassword(userEntity.getPassword());
         out.setEmail(userEntity.getEmail());
-        out.setRole(userRoles);
+        out.setFirstname(userEntity.getFirstName());
+        out.setLastname(userEntity.getLastName());
 
         return out;
     }
@@ -37,10 +38,8 @@ public class UserConverter {
         out.setUsername(user.getUsername());
         out.setPassword(user.getPassword());
         out.setEmail(user.getEmail());
-        // None provided in user object
-//        out.setFirstName();
-//        out.setLastName();
-
+        out.setFirstName(user.getFirstname());
+        out.setLastName(user.getLastname());
         return out;
     }
 }

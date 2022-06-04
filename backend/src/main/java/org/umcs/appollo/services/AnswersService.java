@@ -12,7 +12,7 @@ import org.umcs.appollo.converters.AnswerConverter;
 import org.umcs.appollo.model.AnswerEntity;
 import org.umcs.appollo.model.PollEntity;
 import org.umcs.appollo.model.QuestionEntity;
-import org.umcs.appollo.model.api.AnswerDetails;
+import org.umcs.appollo.model.api.Answer;
 import org.umcs.appollo.repository.AnswerRepository;
 import org.umcs.appollo.repository.PollRepository;
 import org.umcs.appollo.repository.QuestionRepository;
@@ -32,12 +32,12 @@ public class AnswersService {
         this.questionRepository = questionRepository;
     }
 
-    public List<AnswerDetails> getAnswersForPoll(Integer pollId) {
+    public List<Answer> getAnswersForPoll(Integer pollId) {
         Optional<PollEntity> result = pollRepository.findById(pollId);
         if (result.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poll with id " + pollId + " not found.");
         }
-        List<AnswerDetails> answers = new ArrayList<AnswerDetails>();
+        List<Answer> answers = new ArrayList<Answer>();
         for(QuestionEntity question : result.get().getQuestions()) {
             for(AnswerEntity answer : question.getAnswers()) {
                 answers.add(answerConverter.FromEntityToApi(answer));
@@ -46,7 +46,7 @@ public class AnswersService {
         return answers;
     }
 
-    public List<AnswerDetails> addPollAnswers(Integer id, List<AnswerDetails> answers) {
+    public List<Answer> addPollAnswers(Integer id, List<Answer> answers) {
         Optional<PollEntity> result = pollRepository.findById(id);
         List<AnswerEntity> answersEntities;
         try {
@@ -67,7 +67,7 @@ public class AnswersService {
 
     // Is this really needed? Isn't ID enough? To do: test it after controller is in
     // place.
-    private AnswerEntity enrichAnswerWithQuestionInfo(AnswerDetails a) {
+    private AnswerEntity enrichAnswerWithQuestionInfo(Answer a) {
         AnswerEntity answer = answerConverter.FromApiToEntity(a);
         Integer questionId = a.getQuestionId();
         Optional<QuestionEntity> question = questionRepository.findById(questionId);

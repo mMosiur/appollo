@@ -1,6 +1,7 @@
 package org.umcs.appollo.model;
 
 import javax.persistence.*;
+import java.awt.print.Book;
 import java.util.List;
 import java.util.Set;
 
@@ -40,7 +41,16 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles;
 
-    public UserEntity() {
+    public UserEntity() {}
+
+    public void addRole(RoleEntity role) {
+        this.roles.add(role);
+        role.getUsers().add(this);
+    }
+
+    public void removeRole(RoleEntity role) {
+        this.roles.remove(role);
+        role.getUsers().remove(this);
     }
 
     public UserEntity(String username, String firstName, String lastName, String email, String password, Set<RoleEntity> roles) {

@@ -14,7 +14,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PollDetails'
+              $ref: '#/components/schemas/Poll'
         required: true
       responses:
         '201':
@@ -22,7 +22,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PollDetails'
+                $ref: '#/components/schemas/Poll'
         '400':
           description: Invalid request.
     get:
@@ -57,7 +57,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PollDetails'
+                $ref: '#/components/schemas/Poll'
         '404':
           description: Poll not found.
     put:
@@ -76,7 +76,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PollDetails'
+              $ref: '#/components/schemas/Poll'
         required: true
       responses:
         '200':
@@ -84,7 +84,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PollDetails'
+                $ref: '#/components/schemas/Poll'
         '401':
           description: User not authenticated.
         '403':
@@ -133,7 +133,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/AnswerDetails'
+                $ref: '#/components/schemas/Answer'
         required: true
       responses:
         '201':
@@ -143,7 +143,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/AnswerDetails'
+                  $ref: '#/components/schemas/Answer'
         '400':
           description: Invalid request.
         '404':
@@ -171,7 +171,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/AnswerDetails'
+                  $ref: '#/components/schemas/Answer'
         '401':
           description: User not authenticated.
         '403':
@@ -296,8 +296,7 @@ paths:
           content:
             application/json:
               schema:
-                type: string
-                example: '312-5k234fddsl'
+                $ref: '#/components/schemas/AuthToken'
         '400':
           description: Invalid request. Could be due to invalid username/password.
           content:
@@ -306,7 +305,7 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    PollDetails:
+    Poll:
       type: object
       required:
         - id
@@ -315,7 +314,6 @@ components:
         id:
           type: integer
           example: 1234
-          readOnly: true
         name:
           type: string
           default: Poll
@@ -327,8 +325,8 @@ components:
         questions:
           type: array
           items:
-            $ref: '#/components/schemas/QuestionDetails'
-    QuestionDetails:
+            $ref: '#/components/schemas/Question'
+    Question:
       type: object
       required:
         - id
@@ -338,7 +336,6 @@ components:
         id:
           type: integer
           example: 1234
-          readOnly: true
         text:
           type: string
           example: What is your favorite color?
@@ -359,7 +356,7 @@ components:
           type: array
           items:
             type: string
-    AnswerDetails:
+    Answer:
       type: object
       required:
         - id
@@ -369,7 +366,6 @@ components:
         id:
           type: integer
           example: 1234
-          readOnly: true
         question_id:
           type: integer
           example: 1234
@@ -387,32 +383,40 @@ components:
         name:
           type: string
           example: Favorite things poll
+    AuthToken:
+      type: object
+      properties:
+        value:
+          type: string
+          example: "312-3fjsdkf123-1143252k423-dsaas0"
     User:
       type: object
       required:
         - id
         - username
         - password
+        - firstname
+        - lastname
         - email
-        - role
       properties:
         id:
           type: integer
           example: 1234
-          readOnly: true
         username:
           type: string
           example: FlyingPanda98
         password:
           type: string
           example: Securepassword1337!
+        firstname:
+          type: string
+          example: John
+        lastname:
+          type: string
+          example: Bravo
         email:
           type: string
           example: flpanda98@site.com
-        role:
-          type: array
-          items:
-            type: string
     UserLoginAttempt:
       type: object
       required:

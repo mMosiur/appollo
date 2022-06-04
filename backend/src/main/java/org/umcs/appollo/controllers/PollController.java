@@ -1,13 +1,14 @@
 package org.umcs.appollo.controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.umcs.appollo.api.PollsApi;
 import org.umcs.appollo.model.PollEntity;
-import org.umcs.appollo.model.api.AnswerDetails;
-import org.umcs.appollo.model.api.PollDetails;
+import org.umcs.appollo.model.api.Answer;
+import org.umcs.appollo.model.api.Poll;
 import org.umcs.appollo.model.api.PollLabel;
 import org.umcs.appollo.services.AnswersService;
 import org.umcs.appollo.services.PollService;
@@ -28,7 +29,8 @@ public class PollController implements PollsApi {
     }
 
     @Override
-    public ResponseEntity<PollDetails> createPoll(@Valid PollDetails poll) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Poll> createPoll(@Valid Poll poll) {
         PollEntity createdPool;
         try{
             createdPool = pollService.createPoll(poll);
@@ -40,6 +42,7 @@ public class PollController implements PollsApi {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deletePollById(Integer id) {
         try{
             pollService.deletePoll(id);
@@ -50,8 +53,8 @@ public class PollController implements PollsApi {
     }
 
     @Override
-    public ResponseEntity<List<AnswerDetails>> getAnswersToPollById(Integer id) {
-        List<AnswerDetails> answers;
+    public ResponseEntity<List<Answer>> getAnswersToPollById(Integer id) {
+        List<Answer> answers;
         try{
             answers = answersService.getAnswersForPoll(id);
         }catch(ResponseStatusException ex){
@@ -61,8 +64,8 @@ public class PollController implements PollsApi {
     }
 
     @Override
-    public ResponseEntity<PollDetails> getPollById(Integer id) {
-        PollDetails poll;
+    public ResponseEntity<Poll> getPollById(Integer id) {
+        Poll poll;
         try{
             poll = pollService.getPoll(id);
 
@@ -84,8 +87,8 @@ public class PollController implements PollsApi {
     }
 
     @Override
-    public ResponseEntity<List<AnswerDetails>> submitAnswersToPollById(Integer id, @Valid List<AnswerDetails> filledPoll) {
-        List<AnswerDetails> addPollAnswers;
+    public ResponseEntity<List<Answer>> submitAnswersToPollById(Integer id, @Valid List<Answer> filledPoll) {
+        List<Answer> addPollAnswers;
         try {
             addPollAnswers = answersService.addPollAnswers(id, filledPoll);
         } catch(ResponseStatusException ex) {
@@ -95,7 +98,8 @@ public class PollController implements PollsApi {
     }
 
     @Override
-    public ResponseEntity<PollDetails> updatePoll(Integer id, @Valid PollDetails pollDetails) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Poll> updatePoll(Integer id, @Valid Poll pollDetails) {
         try {
             pollDetails = pollService.updatePoll(id, pollDetails);
         } catch(ResponseStatusException ex) {

@@ -6,7 +6,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.umcs.appollo.converters.PollConverter;
 import org.umcs.appollo.model.PollEntity;
 import org.umcs.appollo.model.QuestionEntity;
-import org.umcs.appollo.model.api.PollDetails;
+import org.umcs.appollo.model.api.Poll;
 import org.umcs.appollo.model.api.PollLabel;
 import org.umcs.appollo.repository.PollRepository;
 import org.umcs.appollo.repository.QuestionRepository;
@@ -36,7 +36,7 @@ public class PollService {
         return pollList;
     }
 
-    public PollDetails getPoll(Integer id) {
+    public Poll getPoll(Integer id) {
         Optional<PollEntity> result = pollRepository.findById(id);
         if (result.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poll with id " + id + " not found.");
@@ -45,7 +45,7 @@ public class PollService {
         return pollConverter.FromEntityToApiDetailed(pollEntity);
     }
 
-    public PollEntity createPoll(PollDetails poll) {
+    public PollEntity createPoll(Poll poll) {
         PollEntity pollEntity = pollConverter.FromApiToEntity(poll);
         if (pollEntity == null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Poll not found");
@@ -65,7 +65,7 @@ public class PollService {
         pollRepository.delete(poll);
     }
 
-    public PollDetails updatePoll(Integer id, PollDetails newPoll) {
+    public Poll updatePoll(Integer id, Poll newPoll) {
         if (pollRepository.getById(id) == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poll with id " + id + " not found.");
         }
