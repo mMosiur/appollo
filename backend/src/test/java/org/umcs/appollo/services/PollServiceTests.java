@@ -3,11 +3,11 @@ package org.umcs.appollo.services;
 import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.umcs.appollo.converters.PollConverter;
 import org.umcs.appollo.converters.QuestionConverter;
@@ -15,6 +15,7 @@ import org.umcs.appollo.model.PollEntity;
 import org.umcs.appollo.model.QuestionEntity;
 import org.umcs.appollo.model.api.PollDetails;
 import org.umcs.appollo.model.api.PollLabel;
+import org.umcs.appollo.model.api.QuestionDetails;
 import org.umcs.appollo.repository.PollRepository;
 import org.umcs.appollo.repository.QuestionRepository;
 
@@ -31,6 +32,8 @@ public class PollServiceTests {
     @Mock
     private PollConverter pollConverter;
     @Mock
+    private QuestionConverter questionConverter;
+    @Mock
     private QuestionRepository questionRepository;
     @InjectMocks
     PollService pollService;
@@ -38,10 +41,16 @@ public class PollServiceTests {
     private final Gson gson = new Gson();
     private PollEntity pollEntity;
     private PollDetails pollDetails;
+
     private QuestionEntity questionEntity;
 
     @Before
     public void setup(){
+        MockitoAnnotations.initMocks(this);
+        questionConverter = new QuestionConverter();
+        pollConverter = new PollConverter(questionConverter);
+        pollService = new PollService(pollRepository, pollConverter, questionRepository);
+
         pollEntity = new PollEntity();
         pollEntity.setId(1);
         pollEntity.setName("test");
@@ -60,10 +69,11 @@ public class PollServiceTests {
 
         List<QuestionEntity> questionEntitiesList = new LinkedList<>();
         questionEntitiesList.add(questionEntity);
+        List<QuestionDetails> questionDetailsList = new LinkedList<>();
+        questionDetailsList.add(questionConverter.FromEntityToApi(questionEntity));
 
         pollEntity.setQuestions(questionEntitiesList);
-//        pollDetails = pollConverter.FromEntityToApiDetailed(pollEntity);
-//        System.out.println(pollDetails);
+        pollDetails.setQuestions(questionDetailsList);
     }
 
     @Test
@@ -73,15 +83,15 @@ public class PollServiceTests {
         List<PollLabel> pollList = pollService.getPolls();
 
         assertThat(pollList).isNotNull();
-//        Mockito.when(pollService.getPolls()).thenReturn(List.of(pollLabel));
     }
 
     @Test
     public void getPollCorrect(){
         given(pollRepository.findById(1)).willReturn(Optional.of(pollEntity));
-        given(pollConverter.FromEntityToApiDetailed(pollEntity)).willReturn(pollDetails);
 
         PollDetails pollDetailsTest = pollService.getPoll(1);
+
+//        System.out.println(pollDetailsTest);
 
         assertThat(pollDetails).isNotNull();
         assertEquals(pollDetailsTest.getId(), 1);
@@ -89,13 +99,36 @@ public class PollServiceTests {
 
     @Test
     public void createPollCorrect(){
-        given(pollConverter.FromApiToEntity(pollDetails)).willReturn(pollEntity);
-        given(pollRepository.save(pollEntity)).willReturn(pollEntity);
-        given(questionRepository.saveAll(pollEntity.getQuestions())).willReturn(pollEntity.getQuestions());
+        when(pollRepository.save(any(PollEntity.class))).thenReturn(pollEntity);
+        when(questionRepository.saveAll(pollEntity.getQuestions())).thenReturn(pollEntity.getQuestions());
 
         PollEntity pollEntityTest = pollService.createPoll(pollDetails);
 
         assertThat(pollEntityTest).isNotNull();
-        assertThat(pollEntityTest.getQuestions()).isNotNull();
+        assertThat(pollEntityTest.getQuestions()).isNotEmpty();
+        assertThat(pollEntityTest.getId()).isEqualTo(1);
+        assertThat(pollEntityTest.getName()).isEqualTo("test");
+    }
+
+    @Test
+    public void deletePollCorrect(){
+        given(pollRepository.getById(1)).willReturn(pollEntity);
+
+        pollService.deletePoll(1);
+
+        verify(pollRepository, times(1)).delete(pollEntity);
+    }
+
+    @Test
+    public void updatePollCorrect(){
+        given(pollRepository.getById(1)).willReturn(pollEntity);
+        pollDetails.setName("test123");
+
+        when(pollRepository.save(any(PollEntity.class))).thenReturn(pollConverter.FromApiToEntity(pollDetails));
+        when(questionRepository.saveAll(pollEntity.getQuestions())).thenReturn(pollEntity.getQuestions());
+
+        PollDetails pollDetailsTest = pollService.updatePoll(1, pollDetails);
+
+        assertThat(pollDetailsTest.getName()).isEqualTo("test123");
     }
 }
