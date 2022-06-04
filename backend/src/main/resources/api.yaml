@@ -25,6 +25,8 @@ paths:
                 $ref: '#/components/schemas/Poll'
         '400':
           description: Invalid request.
+        '401':
+          description: User not authorized to create poll.
     get:
       description: Get all polls.
       operationId: getPolls
