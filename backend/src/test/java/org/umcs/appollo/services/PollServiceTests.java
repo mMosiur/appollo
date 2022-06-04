@@ -82,7 +82,7 @@ public class PollServiceTests {
 
         List<PollLabel> pollList = pollService.getPolls();
 
-        assertThat(pollList).isNotNull();
+        assertThat(pollList).isNotEmpty();
     }
 
     @Test
@@ -90,8 +90,6 @@ public class PollServiceTests {
         given(pollRepository.findById(1)).willReturn(Optional.of(pollEntity));
 
         PollDetails pollDetailsTest = pollService.getPoll(1);
-
-//        System.out.println(pollDetailsTest);
 
         assertThat(pollDetails).isNotNull();
         assertEquals(pollDetailsTest.getId(), 1);
