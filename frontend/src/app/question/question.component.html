@@ -1,1 +1,8 @@
-<p>question works!</p>
+<ng-container [ngSwitch]="question.type">
+  <app-text-question *ngSwitchCase="textType" [text]="question.text" [(answer)]="answer"></app-text-question>
+  <app-checkbox-question *ngSwitchCase="checkboxType" [text]="question.text" [options]="getOptions()"></app-checkbox-question>
+  <app-radio-question *ngSwitchCase="radioType" [text]="question.text" [(answer)]="answer" [options]="getOptions()"></app-radio-question>
+  <app-email-question *ngSwitchCase="emailType" [text]="question.text" [(email)]="answer"></app-email-question>
+  <app-datetime-question *ngSwitchCase="datetimeType" [text]="question.text" [(answer)]="answer"></app-datetime-question>
+  <h2 *ngSwitchDefault>Unknown question "{{question.type}}"</h2>
+</ng-container>

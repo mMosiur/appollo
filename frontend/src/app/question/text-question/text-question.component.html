@@ -1,1 +1,5 @@
-<p>text-question works!</p>
+<h2>Text question</h2>
+<mat-form-field class="full-width" appearance="fill">
+  <mat-label>{{text}}</mat-label>
+  <input matInput placeholder="Answer" type="text" #ctrl="ngModel" required [ngModel]="answer" (ngModelChange)="onAnswerInputChange($event)" />
+</mat-form-field>

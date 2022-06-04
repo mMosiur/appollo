@@ -1,1 +1,8 @@
-<p>checkbox-question works!</p>
+<h2>Checkbox question</h2>
+<section class="example-section">
+  <ul>
+    <li *ngFor="let option of options; index as i">
+      <mat-checkbox class="example-margin" [(ngModel)]="choices[i]">{{option}}</mat-checkbox>
+    </li>
+  </ul>
+</section>

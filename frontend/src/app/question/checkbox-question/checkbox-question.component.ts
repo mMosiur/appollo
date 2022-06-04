@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-checkbox-question',
@@ -7,9 +7,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CheckboxQuestionComponent implements OnInit {
 
+  @Input() text: string = "";
+
+  @Input() options: string[] = [];
+
+  choices: boolean[] = [];
+
   constructor() { }
 
   ngOnInit(): void {
+    this.choices = this.options.map(() => false);
   }
 
 }

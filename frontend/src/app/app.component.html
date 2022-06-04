@@ -1,10 +1,9 @@
 <h1>{{ title }}</h1>
 <h2>{{ poll.name }}</h2>
-<ul>
-  <li *ngFor="let question of poll.questions">
-    <input type="{{ question.type }}" />
-    <p>{{ question.text }}</p>
-  </li>
-</ul>
-
-<button type="button" (click)="onClick()">Hi</button>
+<form class="questions-form">
+  <hr>
+  <ng-container *ngFor="let question of poll.questions">
+    <app-question [question]="question"></app-question>
+    <hr>
+  </ng-container>
+</form>

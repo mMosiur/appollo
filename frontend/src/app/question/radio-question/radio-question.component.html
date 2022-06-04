@@ -1,1 +1,10 @@
-<p>radio-question works!</p>
+<h2>Radio question</h2>
+<label id="radio-question-label">{{text}}</label>
+<mat-radio-group
+  aria-labelledby="radio-question-label"
+  class="question-radio-group"
+  [(ngModel)]="answer">
+  <mat-radio-button class="question-radio-button" *ngFor="let option of options" [value]="option">
+    {{option}}
+  </mat-radio-button>
+</mat-radio-group>

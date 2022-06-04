@@ -7,4 +7,5 @@ enum QuestionType {
   File = "file",
   Number = "number"
 }
+
 export default QuestionType;
