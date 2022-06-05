@@ -7,8 +7,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class EmailQuestionComponent {
 
-  @Input() text: string = "";
-  @Input() email: string = "";
+  @Input() text: string = '';
+  @Input() email: string = '';
   @Output() emailChange = new EventEmitter<string>();
 
   constructor() { }

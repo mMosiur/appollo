@@ -16,7 +16,12 @@ import { EmailQuestionComponent } from './question/email-question/email-question
 import { DatetimeQuestionComponent } from './question/datetime-question/datetime-question.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-
+import { HttpClientModule } from '@angular/common/http';
+import { PollService } from './poll.service';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { NumberQuestionComponent } from './question/number-question/number-question.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonModule } from '@angular/material/button';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +30,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     RadioQuestionComponent,
     CheckboxQuestionComponent,
     EmailQuestionComponent,
-    DatetimeQuestionComponent
+    DatetimeQuestionComponent,
+    NumberQuestionComponent
   ],
   imports: [
     BrowserModule,
@@ -37,10 +43,15 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatRadioModule,
     MatCheckboxModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatGridListModule,
+    HttpClientModule,
+    MatProgressSpinnerModule,
+    MatButtonModule
   ],
   providers: [
-    MatDatepickerModule
+    MatDatepickerModule,
+    PollService
   ],
   bootstrap: [AppComponent]
 })

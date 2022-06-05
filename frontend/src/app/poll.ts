@@ -1,6 +1,8 @@
-import { Question } from "./question";
+import { Question } from './question';
 
 export interface Poll {
-  name: string,
-  questions: Question[]
+  id: number;
+  is_active: boolean;
+  name: string;
+  questions: Question[];
 }

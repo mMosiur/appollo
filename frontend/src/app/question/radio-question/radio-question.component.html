@@ -3,7 +3,8 @@
 <mat-radio-group
   aria-labelledby="radio-question-label"
   class="question-radio-group"
-  [(ngModel)]="answer">
+  [value]="answer"
+  (change)="onAnswerChange($event)">
   <mat-radio-button class="question-radio-button" *ngFor="let option of options" [value]="option">
     {{option}}
   </mat-radio-button>

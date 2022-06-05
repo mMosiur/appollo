@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Question } from '../question';
 import QuestionType from '../questions-types';
 
@@ -13,12 +13,12 @@ export class QuestionComponent implements OnInit {
   checkboxType = QuestionType.Checkbox
   emailType = QuestionType.Email
   datetimeType = QuestionType.Datetime
-  fileType = QuestionType.File
   numberType = QuestionType.Number
 
-  @Input() question : Question = { text: '', type: QuestionType.Text }
+  @Input() question : Question = { id: 0, text: '', type: QuestionType.Text }
 
   answer: string = ''
+  @Output() answerChange = new EventEmitter<string>();
 
   constructor() { }
 
@@ -26,6 +26,11 @@ export class QuestionComponent implements OnInit {
     if(this.question.options === undefined)
       throw new Error('Options are not defined');
     return this.question.options;
+  }
+
+  onAnswerChange(value: string) {
+    this.answer = value;
+    this.answerChange.emit(value);
   }
 
   ngOnInit(): void {

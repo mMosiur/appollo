@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 @Component({
@@ -9,15 +8,15 @@ import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 })
 export class DatetimeQuestionComponent {
 
-  @Input() text: string = "";
-  @Input() answer: string = "";
+  @Input() text: string = '';
+  @Input() answer: string | null = null;
   @Output() answerChange = new EventEmitter<string>();
 
   constructor() { }
 
   onDateChange(event: MatDatepickerInputEvent<any, any>) : void {
     this.answer = event.value;
-    this.answerChange.emit(this.answer);
+    this.answerChange.emit(this.answer?.toString() ?? '');
   }
 
 }

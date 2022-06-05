@@ -2,7 +2,7 @@
 <section class="example-section">
   <ul>
     <li *ngFor="let option of options; index as i">
-      <mat-checkbox class="example-margin" [(ngModel)]="choices[i]">{{option}}</mat-checkbox>
+      <mat-checkbox (change)="onChange(i, $event)" class="example-margin">{{option}}</mat-checkbox>
     </li>
   </ul>
 </section>

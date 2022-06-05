@@ -1,0 +1,5 @@
+<h2>Number question</h2>
+<mat-form-field class="full-width" appearance="fill">
+  <mat-label>{{text}}</mat-label>
+  <input matInput placeholder="Answer" type="number" #ctrl="ngModel" required [ngModel]="answer" (ngModelChange)="onAnswerInputChange($event)" />
+</mat-form-field>

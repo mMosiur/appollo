@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-text-question',
-  templateUrl: './text-question.component.html',
-  styleUrls: ['./text-question.component.scss']
+  selector: 'app-number-question',
+  templateUrl: './number-question.component.html',
+  styleUrls: ['./number-question.component.scss']
 })
-export class TextQuestionComponent {
+export class NumberQuestionComponent {
 
   @Input() text: string = '';
   @Input() answer: string = '';
@@ -15,7 +15,7 @@ export class TextQuestionComponent {
 
   onAnswerInputChange(event: string) : void {
     this.answer = event;
-    this.answerChange.emit(this.answer);
+    this.answerChange.emit(this.answer?.toString() ?? '');
   }
 
 }

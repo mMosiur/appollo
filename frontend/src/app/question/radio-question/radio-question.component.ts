@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatRadioChange } from '@angular/material/radio';
 
 @Component({
   selector: 'app-radio-question',
@@ -7,15 +8,15 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class RadioQuestionComponent {
 
-  @Input() text: string = "";
-  @Input() answer: string = "";
+  @Input() text: string = '';
+  @Input() answer: string = '';
   @Output() answerChange = new EventEmitter<string>();
   @Input() options: string[] = [];
 
   constructor() { }
 
-  onAnswerInputChange(event: string) : void {
-    this.answer = event;
+  onAnswerChange(event: MatRadioChange): void {
+    this.answer = event.value;
     this.answerChange.emit(this.answer);
   }
 
