@@ -315,6 +315,7 @@ components:
         id:
           type: integer
           example: 1234
+          readOnly: true
         name:
           type: string
           default: Poll
@@ -336,6 +337,7 @@ components:
         id:
           type: integer
           example: 1234
+          readOnly: true
         text:
           type: string
           example: What is your favorite color?
@@ -365,6 +367,7 @@ components:
         id:
           type: integer
           example: 1234
+          readOnly: true
         question_id:
           type: integer
           example: 1234
@@ -391,7 +394,6 @@ components:
     User:
       type: object
       required:
-        - id
         - username
         - password
         - firstname
@@ -401,6 +403,7 @@ components:
         id:
           type: integer
           example: 1234
+          readOnly: true
         username:
           type: string
           example: FlyingPanda98
