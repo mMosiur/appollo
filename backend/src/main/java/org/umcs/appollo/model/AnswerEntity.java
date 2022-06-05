@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity(name = "Answer")
 public class AnswerEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
     private Integer id;
 

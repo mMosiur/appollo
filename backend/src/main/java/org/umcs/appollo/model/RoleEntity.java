@@ -6,7 +6,7 @@ import java.util.Set;
 @Entity(name = "Role")
 public class RoleEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
     private long id;
 
