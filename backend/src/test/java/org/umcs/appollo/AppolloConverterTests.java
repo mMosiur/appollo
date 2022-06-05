@@ -9,14 +9,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.umcs.appollo.converters.AnswerConverter;
 import org.umcs.appollo.converters.PollConverter;
 import org.umcs.appollo.converters.QuestionConverter;
+import org.umcs.appollo.converters.UserConverter;
 import org.umcs.appollo.model.AnswerEntity;
 import org.umcs.appollo.model.PollEntity;
 import org.umcs.appollo.model.QuestionEntity;
 import org.umcs.appollo.model.UserEntity;
-import org.umcs.appollo.model.api.Answer;
-import org.umcs.appollo.model.api.Poll;
-import org.umcs.appollo.model.api.PollLabel;
-import org.umcs.appollo.model.api.Question;
+import org.umcs.appollo.model.api.*;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -29,9 +27,9 @@ public class AppolloConverterTests {
     private QuestionConverter questionConverter;
     private AnswerConverter answerConverter;
     private PollConverter pollConverter;
+    private UserConverter userConverter;
 
-    private UserEntity user1, user2;
-    private final int pollId = 0, questionId = 1, answerId = 2;
+    private final int pollId = 0, questionId = 1, answerId = 2, user1Id = 3;
 
     private PollEntity pollEntity;
     private Poll poll;
@@ -48,11 +46,20 @@ public class AppolloConverterTests {
     private Answer answer;
     private final String answerJson = gson.toJson("Blue");
 
+    private UserEntity user1Entity, user2Entity;
+    private User user1;
+    private final String username1 = "user1";
+    private final String password1 = "p1";
+    private final String email1 = "hehe@yo.com";
+    private final String firstName1 = "Man";
+    private final String lastName1 = "Spider";
+
     @Before
     public void setup() {
         questionConverter = new QuestionConverter();
         answerConverter = new AnswerConverter();
         pollConverter = new PollConverter(questionConverter);
+        userConverter = new UserConverter();
 
         answerEntity = new AnswerEntity();
         questionEntity = new QuestionEntity();
@@ -62,17 +69,43 @@ public class AppolloConverterTests {
         question = new Question();
         poll = new Poll();
 
-        user1 = new UserEntity();
-        user2 = new UserEntity();
+        // Model users
+        user1Entity = new UserEntity();
+        user1Entity.setId(user1Id);
+        user1Entity.setUsername(username1);
+        user1Entity.setPassword(password1);
+        user1Entity.setEmail(email1);
+        user1Entity.setFirstName(firstName1);
+        user1Entity.setLastName(lastName1);
+        user1 = new User();
+        user1.setId(user1Id);
+        user1.setUsername(username1);
+        user1.setPassword(password1);
+        user1.setEmail(email1);
+        user1.setFirstname(firstName1);
+        user1.setLastname(lastName1);
+
+        user2Entity = new UserEntity();
+//        user2Entity.setId(user2Id);
+//        user2Entity.setUsername(username2);
+//        user2Entity.setPassword(password2);
+//        user2Entity.setEmail(email2);
+//        user2Entity.setFirstName(firstName2);
+//        user2Entity.setLastName(lastName2);
+//        user2 = new User();
+//        user2.setId(user2Id);
+//        user2.setUsername(username2);
+//        user2.setPassword(password2);
+//        user2.setEmail(email2);
+//        user2.setFirstname(firstName2);
+//        user2.setLastname(lastName2);
 
         // Model a poll
         pollEntity.setId(pollId);
         pollEntity.setName(pollName);
-        pollEntity.setUser(user1);
+        pollEntity.setUser(user1Entity);
         poll.setId(pollId);
         poll.setName(pollName);
-        // TODO: no method?
-//        pollDetails.setUser(user1);
 
         // Model a question
         questionEntity.setId(questionId);
@@ -87,7 +120,7 @@ public class AppolloConverterTests {
 
         // Model an answer
         answerEntity.setId(answerId);
-        answerEntity.setUser(user2);
+        answerEntity.setUser(user2Entity);
         answerEntity.setAnswerJson(answerJson);
         answer.setId(answerId);
         answer.setAnswerJson(answerJson);
@@ -154,9 +187,7 @@ public class AppolloConverterTests {
         PollEntity pollEntity = pollConverter.FromApiToEntity(poll);
         Assert.assertEquals(pollEntity.getId().intValue(), pollId);
         Assert.assertEquals(pollEntity.getName(), pollName);
-//        Assert.assertEquals(pollEntity.getUser(), user1);
         Assert.assertEquals(pollEntity.getQuestions().size(), 1);
-//        Assert.assertEquals(pollEntity.getQuestions().get(0), questionEntity);
     }
 
     @Test
@@ -167,9 +198,6 @@ public class AppolloConverterTests {
         Assert.assertEquals(questionEntity.getOptions(), questionOptions);
         Assert.assertEquals(questionEntity.getText(), questionText);
         Assert.assertEquals(questionEntity.getType(), questionType);
-//        Assert.assertEquals(questionEntity.getAnswers().size(), 1);
-//        Assert.assertEquals(questionEntity.getAnswers().get(0), answerEntity);
-//        Assert.assertEquals(questionEntity.getPoll(), pollEntity);
     }
 
     @Test
@@ -177,8 +205,30 @@ public class AppolloConverterTests {
         Assert.assertNull(answerConverter.FromApiToEntity(null));
         AnswerEntity answerEntity = answerConverter.FromApiToEntity(answer);
         Assert.assertEquals(answerEntity.getId().intValue(), answerId);
-//        Assert.assertEquals(answerEntity.getQuestion(), questionEntity);
         Assert.assertEquals(answerEntity.getAnswerJson(), answerJson);
-//        Assert.assertEquals(answerEntity.getUser(), user2);
+    }
+
+    @Test
+    public void ConvertUserFromApiToEntity() {
+        Assert.assertNull(userConverter.FromApiToEntity(null));
+        UserEntity userEntity = userConverter.FromApiToEntity(user1);
+        Assert.assertEquals(userEntity.getId().intValue(), user1Id);
+        Assert.assertEquals(userEntity.getUsername(), username1);
+        Assert.assertEquals(userEntity.getPassword(), password1);
+        Assert.assertEquals(userEntity.getEmail(), email1);
+        Assert.assertEquals(userEntity.getFirstName(), firstName1);
+        Assert.assertEquals(userEntity.getLastName(), lastName1);
+    }
+
+    @Test
+    public void ConvertUserFromEntityToApi() {
+        Assert.assertNull(userConverter.FromEntityToApi(null));
+        User user = userConverter.FromEntityToApi(user1Entity);
+        Assert.assertEquals(user.getId().intValue(), user1Id);
+        Assert.assertEquals(user.getUsername(), username1);
+        Assert.assertEquals(user.getPassword(), password1);
+        Assert.assertEquals(user.getEmail(), email1);
+        Assert.assertEquals(user.getFirstname(), firstName1);
+        Assert.assertEquals(user.getLastname(), lastName1);
     }
 }
