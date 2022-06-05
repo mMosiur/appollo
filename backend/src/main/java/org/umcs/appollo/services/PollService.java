@@ -58,15 +58,15 @@ public class PollService {
     }
 
     public void deletePoll(Integer id) {
-        PollEntity poll = pollRepository.getById(id);
-        if (poll == null) {
+        if (!pollRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poll with id " + id + " not found.");
         }
+        PollEntity poll = pollRepository.getById(id);
         pollRepository.delete(poll);
     }
 
     public Poll updatePoll(Integer id, Poll newPoll) {
-        if (pollRepository.getById(id) == null) {
+        if (!pollRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poll with id " + id + " not found.");
         }
         PollEntity newPollEntity = pollConverter.FromApiToEntity(newPoll);

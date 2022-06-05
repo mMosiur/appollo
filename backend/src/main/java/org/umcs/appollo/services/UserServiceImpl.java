@@ -104,14 +104,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public void delete(int id) {
         UserEntity user = userRepository.getById(id);
-        if(user == null)
+        if(!userRepository.existsById(id))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poll with id " + id + " not found.");
         else
         {
             for (RoleEntity role : user.getRoles())
                 user.removeRole(role);
             userRepository.delete(user);
-
         }
     }
 }
