@@ -1,17 +1,1 @@
-<form class="questions-form">
-  <h1 class="text-center">{{ title }}</h1>
-  <ng-container *ngIf="poll; else elseBlock">
-    <h2 class="text-center">{{ poll.name }}</h2>
-    <hr>
-    <mat-grid-list cols="1" rowHeight="200px">
-      <mat-grid-tile *ngFor="let question of poll.questions; index as i">
-        <app-question [question]="question" (answerChange)="onAnswerChange(i, $event)"></app-question>
-      </mat-grid-tile>
-    </mat-grid-list>
-    <button [disabled]="!isPollFilledIn()" mat-raised-button color="primary" (click)="submit()">Primary</button>
-    <p *ngIf="!isPollFilledIn()">There are missing question answers</p>
-  </ng-container>
-  <ng-template #elseBlock>
-    <mat-spinner class="auto-margin"></mat-spinner>
-  </ng-template>
-</form>
+<router-outlet></router-outlet>
