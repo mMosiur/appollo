@@ -1,5 +1,6 @@
 package org.umcs.appollo.controllers;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,7 +45,7 @@ public class PollController implements PollsApi {
         }catch(ResponseStatusException ex){
             throw new RuntimeException(ex.getMessage());
         }
-        return ResponseEntity.ok().body(pollService.getPoll(createdPoll.getId()));
+        return new ResponseEntity<>(pollService.getPoll(createdPoll.getId()), HttpStatus.CREATED);
     }
 
     @Override
