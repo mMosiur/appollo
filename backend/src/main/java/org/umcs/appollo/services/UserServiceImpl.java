@@ -58,6 +58,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public User addNewUser(User user) {
         UserEntity userEntity = userConverter.FromApiToEntity(user);
+        userEntity.setId(null);
         userEntity.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         Set<RoleEntity> roles = new HashSet<>();
         roles.add(roleService.findByName(RoleNames.ROLE_USER));

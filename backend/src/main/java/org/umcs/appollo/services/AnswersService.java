@@ -72,6 +72,7 @@ public class AnswersService {
     // place.
     private AnswerEntity enrichAnswerWithQuestionInfo(Answer a, Integer userId) {
         AnswerEntity answer = answerConverter.FromApiToEntity(a);
+        answer.setId(null);
         Integer questionId = a.getQuestionId();
         Optional<QuestionEntity> question = questionRepository.findById(questionId);
         if (question.isEmpty()) {
