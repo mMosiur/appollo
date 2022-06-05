@@ -52,8 +52,6 @@ public class PollService {
         for (QuestionEntity question : pollEntity.getQuestions())
             question.setPoll(pollEntity);
         pollEntity = pollRepository.save(pollEntity);
-        pollEntity.setQuestions(
-                questionRepository.saveAll(pollEntity.getQuestions()));
         return pollEntity;
     }
 
