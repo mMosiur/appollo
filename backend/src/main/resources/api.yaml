@@ -14,7 +14,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PollDetails'
+              $ref: '#/components/schemas/Poll'
         required: true
       responses:
         '201':
@@ -22,9 +22,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PollDetails'
+                $ref: '#/components/schemas/Poll'
         '400':
           description: Invalid request.
+        '401':
+          description: User not authorized to create poll.
     get:
       description: Get all polls.
       operationId: getPolls
@@ -57,7 +59,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PollDetails'
+                $ref: '#/components/schemas/Poll'
         '404':
           description: Poll not found.
     put:
@@ -76,7 +78,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PollDetails'
+              $ref: '#/components/schemas/Poll'
         required: true
       responses:
         '200':
@@ -84,7 +86,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PollDetails'
+                $ref: '#/components/schemas/Poll'
         '401':
           description: User not authenticated.
         '403':
@@ -133,7 +135,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/AnswerDetails'
+                $ref: '#/components/schemas/Answer'
         required: true
       responses:
         '201':
@@ -143,7 +145,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/AnswerDetails'
+                  $ref: '#/components/schemas/Answer'
         '400':
           description: Invalid request.
         '404':
@@ -171,7 +173,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/AnswerDetails'
+                  $ref: '#/components/schemas/Answer'
         '401':
           description: User not authenticated.
         '403':
@@ -280,31 +282,6 @@ paths:
           description: User not authorized to delete this user.
         '404':
           description: User not found.
-  /users/{id}/profile:
-    get:
-      description: Get profile for user of a given id.
-      operationId: getUserProfileById
-      parameters:
-        - name: id
-          description: Id of the requested users profile.
-          in: path
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: integer
-            example: 1234
-      responses:
-        '200':
-          description: A user profile of a given id.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserDisplayProfile'
-        '401':
-          description: User not authenticated.
-        '404':
-          description: User not found.
   /users/login:
     post:
       description: Login a user.
@@ -318,25 +295,21 @@ paths:
       responses:
         '204':
           description: User successfully logged in.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
         '400':
           description: Invalid request. Could be due to invalid username/password.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /users/logout:
-    post:
-      description: Logout current user.
-      operationId: logoutUser
-      responses:
-        default:
-          description: User successfully logged out.
 components:
   schemas:
-    PollDetails:
+    Poll:
       type: object
       required:
-        - id
         - questions
       properties:
         id:
@@ -354,11 +327,10 @@ components:
         questions:
           type: array
           items:
-            $ref: '#/components/schemas/QuestionDetails'
-    QuestionDetails:
+            $ref: '#/components/schemas/Question'
+    Question:
       type: object
       required:
-        - id
         - text
         - type
       properties:
@@ -386,10 +358,9 @@ components:
           type: array
           items:
             type: string
-    AnswerDetails:
+    Answer:
       type: object
       required:
-        - id
         - question_id
         - answer_json
       properties:
@@ -414,14 +385,20 @@ components:
         name:
           type: string
           example: Favorite things poll
+    AuthToken:
+      type: object
+      properties:
+        value:
+          type: string
+          example: "312-3fjsdkf123-1143252k423-dsaas0"
     User:
       type: object
       required:
-        - id
         - username
         - password
+        - firstname
+        - lastname
         - email
-        - user_details
       properties:
         id:
           type: integer
@@ -433,40 +410,15 @@ components:
         password:
           type: string
           example: Securepassword1337!
+        firstname:
+          type: string
+          example: John
+        lastname:
+          type: string
+          example: Bravo
         email:
           type: string
           example: flpanda98@site.com
-        user_details:
-          $ref: '#/components/schemas/UserDetails'
-    UserDisplayProfile:
-      allOf:
-        - type: object
-          properties:
-            username:
-              type: string
-              example: FlyingPanda98
-        - $ref: '#/components/schemas/UserDetails'
-    UserDetails:
-      type: object
-      required:
-        - id
-      properties:
-        id:
-          type: integer
-          example: 1234
-          readOnly: true
-        age:
-          type: integer
-          example: 24
-          default: -1
-        sex:
-          type: string
-          example: male
-          enum:
-            - male
-            - female
-            - unspecified
-          default: unspecified
     UserLoginAttempt:
       type: object
       required:

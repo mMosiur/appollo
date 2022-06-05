@@ -1,18 +1,26 @@
 package org.umcs.appollo.model;
 
 import javax.persistence.*;
+import java.awt.print.Book;
 import java.util.List;
+import java.util.Set;
 
 @Entity(name = "User")
 @Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = "email"), @UniqueConstraint(columnNames = "username")})
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
     private Integer id;
 
     @Column(name = "username", nullable = false)
     private String username;
+
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
 
     @Column(name = "email", nullable = false)
     private String email;
@@ -20,28 +28,46 @@ public class UserEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name="role")
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "details_id")
-    private UserDetailsEntity details;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PollEntity> polls;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<AnswerEntity> answers;
 
-    public UserEntity() {
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<RoleEntity> roles;
+
+    public UserEntity() {}
+
+    public void addRole(RoleEntity role) {
+        this.roles.add(role);
+        role.getUsers().add(this);
     }
 
-    public UserEntity(String username, String email, String password) {
+    public void removeRole(RoleEntity role) {
+        this.roles.remove(role);
+        role.getUsers().remove(this);
+    }
+
+    public UserEntity(String username, String firstName, String lastName, String email, String password, Set<RoleEntity> roles) {
         this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.role = Role.USER;
+        this.roles = roles;
+    }
+
+    public Set<RoleEntity> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<RoleEntity> roles) {
+        this.roles = roles;
     }
 
     public Integer getId() {
@@ -60,6 +86,22 @@ public class UserEntity {
         this.username = username;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -74,22 +116,6 @@ public class UserEntity {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public UserDetailsEntity getDetails() {
-        return details;
-    }
-
-    public void setDetails(UserDetailsEntity details) {
-        this.details = details;
     }
 
     public List<PollEntity> getPolls() {
@@ -113,10 +139,10 @@ public class UserEntity {
         return "UserEntity{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", role=" + role +
-                ", details=" + details +
                 '}';
     }
 }
