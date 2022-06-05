@@ -37,14 +37,14 @@ public class PollController implements PollsApi {
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Poll> createPoll(@Valid Poll poll) {
-        PollEntity createdPool;
+        PollEntity createdPoll;
         try{
-            createdPool = pollService.createPoll(poll);
+            createdPoll = pollService.createPoll(poll);
 
         }catch(ResponseStatusException ex){
             throw new RuntimeException(ex.getMessage());
         }
-        return ResponseEntity.ok().body(pollService.getPoll(createdPool.getId()));
+        return ResponseEntity.ok().body(pollService.getPoll(createdPoll.getId()));
     }
 
     @Override
