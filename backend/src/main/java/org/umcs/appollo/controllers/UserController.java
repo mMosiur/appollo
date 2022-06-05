@@ -1,4 +1,5 @@
 package org.umcs.appollo.controllers;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -61,7 +62,7 @@ public class UserController implements UsersApi {
             throw new RuntimeException(e.getMessage());
         }
 
-       return ResponseEntity.ok(result);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
     @Override

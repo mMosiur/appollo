@@ -310,7 +310,6 @@ components:
     Poll:
       type: object
       required:
-        - id
         - questions
       properties:
         id:
@@ -331,7 +330,6 @@ components:
     Question:
       type: object
       required:
-        - id
         - text
         - type
       properties:
@@ -361,7 +359,6 @@ components:
     Answer:
       type: object
       required:
-        - id
         - question_id
         - answer_json
       properties:

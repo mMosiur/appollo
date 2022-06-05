@@ -14,9 +14,6 @@ public class UserConverter {
             return null;
 
         User out = new User();
-        LinkedList<String> userRoles = new LinkedList<>();
-        for (RoleEntity role: userEntity.getRoles())
-            userRoles.add(role.getName());
 
         out.setId(userEntity.getId());
         out.setUsername(userEntity.getUsername());

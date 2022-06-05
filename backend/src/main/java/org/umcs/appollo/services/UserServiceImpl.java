@@ -58,6 +58,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public User addNewUser(User user) {
         UserEntity userEntity = userConverter.FromApiToEntity(user);
+        userEntity.setId(null);
         userEntity.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         Set<RoleEntity> roles = new HashSet<>();
         roles.add(roleService.findByName(RoleNames.ROLE_USER));
@@ -66,9 +67,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         userEntity.setAnswers(new ArrayList<>());
         userEntity.setPolls(new ArrayList<>());
 
-        userRepository.save(userEntity);
-
-        user = userConverter.FromEntityToApi(userEntity);
+        user = userConverter.FromEntityToApi(userRepository.save(userEntity));
         return user;
     }
 
@@ -90,6 +89,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
+    public User findOne(String username) {
+        UserEntity target = userRepository.findByUsername(username);
+        if (target == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No user of username " + username + " found.");
+
+        return userConverter.FromEntityToApi(target);
+    }
+
+    @Override
     public User edit(int id, User data) {
         UserEntity target = userRepository.getById(id);
         target.setUsername(data.getUsername());
@@ -97,21 +105,20 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         target.setEmail(data.getEmail());
         target.setFirstName(data.getFirstname());
         target.setLastName(data.getLastname());
-        userRepository.save(target);
-        return userConverter.FromEntityToApi(target);
+
+        return userConverter.FromEntityToApi(userRepository.save(target));
     }
 
     @Override
     public void delete(int id) {
         UserEntity user = userRepository.getById(id);
-        if(user == null)
+        if(!userRepository.existsById(id))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poll with id " + id + " not found.");
         else
         {
             for (RoleEntity role : user.getRoles())
                 user.removeRole(role);
             userRepository.delete(user);
-
         }
     }
 }
