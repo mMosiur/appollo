@@ -66,9 +66,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         userEntity.setAnswers(new ArrayList<>());
         userEntity.setPolls(new ArrayList<>());
 
-        userRepository.save(userEntity);
-
-        user = userConverter.FromEntityToApi(userEntity);
+        user = userConverter.FromEntityToApi(userRepository.save(userEntity));
         return user;
     }
 
@@ -97,8 +95,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         target.setEmail(data.getEmail());
         target.setFirstName(data.getFirstname());
         target.setLastName(data.getLastname());
-        userRepository.save(target);
-        return userConverter.FromEntityToApi(target);
+
+        return userConverter.FromEntityToApi(userRepository.save(target));
     }
 
     @Override
