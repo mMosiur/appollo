@@ -1,5 +1,6 @@
 package org.umcs.appollo.services;
 
+import com.sun.xml.bind.v2.TODO;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -57,6 +58,7 @@ public class PollService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Poll not found");
 
         pollEntity.setId(null);
+        // TODO: 05.06.2022 DODANIE UZYTKOWNIKA 
         pollEntity.setQuestions(null);
         pollEntity = pollRepository.save(pollEntity);
         List<QuestionEntity> questionEntities = new ArrayList<>();
@@ -89,8 +91,6 @@ public class PollService {
             question.setPoll(newPollEntity);
         newPollEntity.setId(id);
         newPollEntity = pollRepository.save(newPollEntity);
-        newPollEntity.setQuestions(
-                questionRepository.saveAll(newPollEntity.getQuestions()));
         return pollConverter.FromEntityToApiDetailed(newPollEntity);
     }
 }

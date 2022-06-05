@@ -52,6 +52,7 @@ public class AnswersService {
     public List<Answer> addPollAnswers(Integer id, List<Answer> answers, Integer user_id) {
         Optional<PollEntity> result = pollRepository.findById(id);
         List<AnswerEntity> answersEntities;
+        // TODO: 05.06.2022 walidacja czy pytanie istnieje w dany pollu
         try {
             if (result.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poll with id " + id + " not found.");
