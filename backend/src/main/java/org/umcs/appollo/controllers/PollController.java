@@ -2,16 +2,20 @@ package org.umcs.appollo.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.umcs.appollo.api.PollsApi;
 import org.umcs.appollo.model.PollEntity;
+import org.umcs.appollo.model.UserEntity;
 import org.umcs.appollo.model.api.Answer;
 import org.umcs.appollo.model.api.Poll;
 import org.umcs.appollo.model.api.PollLabel;
 import org.umcs.appollo.services.AnswersService;
 import org.umcs.appollo.services.PollService;
+import org.umcs.appollo.services.UserService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -21,11 +25,13 @@ import java.util.List;
 public class PollController implements PollsApi {
 
     private final PollService pollService;
+    private final UserService userService;
     private final AnswersService answersService;
 
-    public PollController(PollService pollService, AnswersService answersService) {
+    public PollController(PollService pollService, AnswersService answersService, UserService userService) {
         this.pollService = pollService;
         this.answersService = answersService;
+        this.userService = userService;
     }
 
     @Override
@@ -87,10 +93,19 @@ public class PollController implements PollsApi {
     }
 
     @Override
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<Answer>> submitAnswersToPollById(Integer id, @Valid List<Answer> filledPoll) {
         List<Answer> addPollAnswers;
         try {
-            addPollAnswers = answersService.addPollAnswers(id, filledPoll);
+            addPollAnswers = answersService.addPollAnswers(id, filledPoll,
+                    userService.findOne(
+                            ((User)SecurityContextHolder
+                                    .getContext()
+                                    .getAuthentication()
+                                    .getPrincipal())
+                                    .getUsername())
+                            .getId()
+            );
         } catch(ResponseStatusException ex) {
             throw new RuntimeException(ex.getMessage());
         }

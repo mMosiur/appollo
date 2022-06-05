@@ -88,6 +88,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
+    public User findOne(String username) {
+        UserEntity target = userRepository.findByUsername(username);
+        if (target == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No user of username " + username + " found.");
+
+        return userConverter.FromEntityToApi(target);
+    }
+
+    @Override
     public User edit(int id, User data) {
         UserEntity target = userRepository.getById(id);
         target.setUsername(data.getUsername());
