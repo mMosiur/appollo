@@ -6,20 +6,21 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.umcs.appollo.converters.PollConverter;
 import org.umcs.appollo.converters.QuestionConverter;
 import org.umcs.appollo.model.PollEntity;
 import org.umcs.appollo.model.QuestionEntity;
-import org.umcs.appollo.model.api.PollDetails;
+import org.umcs.appollo.model.api.Poll;
 import org.umcs.appollo.model.api.PollLabel;
-import org.umcs.appollo.model.api.QuestionDetails;
+import org.umcs.appollo.model.api.Question;
 import org.umcs.appollo.repository.PollRepository;
 import org.umcs.appollo.repository.QuestionRepository;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,7 +41,7 @@ public class PollServiceTests {
 
     private final Gson gson = new Gson();
     private PollEntity pollEntity;
-    private PollDetails pollDetails;
+    private Poll pollDetails;
 
     private QuestionEntity questionEntity;
 
@@ -49,13 +50,13 @@ public class PollServiceTests {
         MockitoAnnotations.initMocks(this);
         questionConverter = new QuestionConverter();
         pollConverter = new PollConverter(questionConverter);
-        pollService = new PollService(pollRepository, pollConverter, questionRepository);
+        pollService = new PollService(pollRepository, pollConverter, questionRepository,questionConverter);
 
         pollEntity = new PollEntity();
         pollEntity.setId(1);
         pollEntity.setName("test");
 
-        pollDetails = new PollDetails();
+        pollDetails = new Poll();
         pollDetails.setId(1);
         pollDetails.setName("test");
 
@@ -69,7 +70,7 @@ public class PollServiceTests {
 
         List<QuestionEntity> questionEntitiesList = new LinkedList<>();
         questionEntitiesList.add(questionEntity);
-        List<QuestionDetails> questionDetailsList = new LinkedList<>();
+        List<Question> questionDetailsList = new LinkedList<>();
         questionDetailsList.add(questionConverter.FromEntityToApi(questionEntity));
 
         pollEntity.setQuestions(questionEntitiesList);
@@ -89,7 +90,7 @@ public class PollServiceTests {
     public void getPollCorrect(){
         given(pollRepository.findById(1)).willReturn(Optional.of(pollEntity));
 
-        PollDetails pollDetailsTest = pollService.getPoll(1);
+        Poll pollDetailsTest = pollService.getPoll(1);
 
         assertThat(pollDetails).isNotNull();
         assertEquals(pollDetailsTest.getId(), 1);
@@ -125,7 +126,7 @@ public class PollServiceTests {
         when(pollRepository.save(any(PollEntity.class))).thenReturn(pollConverter.FromApiToEntity(pollDetails));
         when(questionRepository.saveAll(pollEntity.getQuestions())).thenReturn(pollEntity.getQuestions());
 
-        PollDetails pollDetailsTest = pollService.updatePoll(1, pollDetails);
+        Poll pollDetailsTest = pollService.updatePoll(1, pollDetails);
 
         assertThat(pollDetailsTest.getName()).isEqualTo("test123");
     }

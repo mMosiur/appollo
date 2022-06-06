@@ -1,5 +1,7 @@
 package org.umcs.appollo.model;
 
+import com.sun.xml.bind.v2.TODO;
+
 import javax.persistence.*;
 
 @Entity(name = "Answer")
@@ -16,6 +18,7 @@ public class AnswerEntity {
     @JoinColumn(name = "question_id", nullable = false)
     private QuestionEntity question;
 
+    // TODO: 06.06.2022 KASKADOWOSC DO ZMIANY  
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;

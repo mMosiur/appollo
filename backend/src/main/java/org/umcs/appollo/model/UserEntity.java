@@ -34,6 +34,7 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<AnswerEntity> answers;
 
+    // TODO: 06.06.2022 KASKADOWOSC DO ZMIANY
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
