@@ -1,7 +1,4 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
-name: Continuous integration
+name: Continuous Integration
 
 on:
   pull_request:
@@ -10,6 +7,7 @@ on:
       - develop
 
 jobs:
+
   build-backend:
     runs-on: ubuntu-latest
     steps:
@@ -23,3 +21,21 @@ jobs:
     - name: Build with Maven
       working-directory: ./backend
       run: mvn -B package --file pom.xml
+
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+    - name: Install dependencies
+      working-directory: ./frontend
+      run: npm ci
+    - name: Build project
+      working-directory: ./frontend
+      run: npm run build --if-present
+    - name: Run tests
+      working-directory: ./frontend
+      run: npm test -- --browsers=ChromeHeadless --progress=false --watch=false --code-coverage --source-map=false
