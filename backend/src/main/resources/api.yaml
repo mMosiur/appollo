@@ -351,7 +351,6 @@ components:
             - checkbox
             - email
             - datetime
-            - file
             - number
           description: Question type.
         options:

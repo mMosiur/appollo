@@ -31,7 +31,9 @@ public class PollConverter {
     public Poll FromEntityToApiDetailed(PollEntity pollEntity) {
         if (pollEntity == null)
             return null;
+ 
         Poll poll = new Poll();
+
         poll.setId(pollEntity.getId());
         List<Question> questions = pollEntity.getQuestions()
                 .stream()
