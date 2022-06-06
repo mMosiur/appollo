@@ -1,0 +1,17 @@
+<form class="center container" (submit)="onSubmit($event)">
+  <mat-form-field appearance="outline">
+    <mat-label>Username</mat-label>
+    <input matInput required type="text" name="username" [(ngModel)]="username">
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Password</mat-label>
+    <input matInput required type="password" name="password" [(ngModel)]="password">
+  </mat-form-field>
+  <button type="submit" mat-raised-button color="primary">
+    LogIn
+  </button>
+  <ng-container *ngIf="waiting">
+    <mat-progress-spinner mode="indeterminate" class="center spinner"></mat-progress-spinner>
+  </ng-container>
+  <p *ngIf="status">{{status}}</p>
+</form>

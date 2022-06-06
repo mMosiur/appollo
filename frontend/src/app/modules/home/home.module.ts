@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { HomeComponent } from './home.component';
+import { HomeRoutingModule } from './home-routing.module';
+import { AccountService } from 'src/app/shared/services/account.service';
 
 
 const routes: Routes = [
@@ -10,11 +12,14 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    HomeComponent
+    HomeComponent,
   ],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes),
+    HomeRoutingModule,
+  ],
+  providers: [
+    AccountService
   ]
 })
 export class HomeModule { }
