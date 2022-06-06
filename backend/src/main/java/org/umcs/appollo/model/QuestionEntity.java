@@ -6,7 +6,7 @@ import java.util.List;
 @Entity(name = "Question")
 public class QuestionEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
     private Integer id;
 

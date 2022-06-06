@@ -2,21 +2,21 @@ package org.umcs.appollo.converters;
 
 import org.springframework.stereotype.Service;
 import org.umcs.appollo.model.AnswerEntity;
-import org.umcs.appollo.model.api.AnswerDetails;
+import org.umcs.appollo.model.api.Answer;
 
 @Service
 public class AnswerConverter {
-    public AnswerDetails FromEntityToApi(AnswerEntity answerEntity) {
+    public Answer FromEntityToApi(AnswerEntity answerEntity) {
         if (answerEntity == null)
             return null;
-        AnswerDetails answer = new AnswerDetails();
+        Answer answer = new Answer();
         answer.setId(answerEntity.getId());
         answer.setQuestionId(answerEntity.getQuestion().getId());
         answer.setAnswerJson(answerEntity.getAnswerJson());
         return answer;
     }
 
-    public AnswerEntity FromApiToEntity(AnswerDetails answer) {
+    public AnswerEntity FromApiToEntity(Answer answer) {
         if (answer == null)
             return null;
         AnswerEntity answerEntity = new AnswerEntity();

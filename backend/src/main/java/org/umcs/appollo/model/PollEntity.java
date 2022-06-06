@@ -6,12 +6,14 @@ import java.util.List;
 @Entity(name = "Poll")
 public class PollEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
     private Integer id;
 
     @Column(name = "name")
     private String name;
+
+    // TODO: 06.06.2022 KASKADOWOSC DO ZMIANY  
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = true)
