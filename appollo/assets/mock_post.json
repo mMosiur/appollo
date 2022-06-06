@@ -1,0 +1,39 @@
+{
+  "name": "Favorite things poll",
+  "questions": [
+    {
+      "type": "text",
+      "text": "How was your day today?"
+    },
+    {
+      "type": "radio",
+      "text": "What is your sex?",
+      "options": [
+        "male",
+        "female",
+        "prefer not to specify"
+      ]
+    },
+    {
+      "type": "checkbox",
+      "text": "What do you like?",
+      "options": [
+        "apples",
+        "bananas",
+        "oranges"
+      ]
+    },
+    {
+      "type": "email",
+      "text": "What is your email?"
+    },
+    {
+      "type": "datetime",
+      "text": "When were you born?"
+    },
+    {
+      "type": "number",
+      "text": "How old are you?"
+    }
+  ]
+}
