@@ -10,14 +10,14 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v2
-
-      - name: Install and Build 🔧
+      - name: Install 🔧
         working-directory: ./frontend
-        run: |
-          npm ci
-          npm run build --prod
+        run: npm ci
+      - name: Build 🏗️
+        working-directory: ./frontend
+        run: npm run build -- --output-path ./dist
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
-          branch: gh-pages # The branch the action should deploy to.
-          folder: ./frontend/dist # The folder the action should deploy.
+          branch: gh-pages
+          folder: ./frontend/dist
