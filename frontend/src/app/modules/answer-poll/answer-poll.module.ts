@@ -22,7 +22,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { PollService } from 'src/app/shared/services/poll.service';
 
 const routes: Routes = [
-  { path: ':id', component: AnswerPollComponent }
+  { path: '', component: AnswerPollComponent }
 ];
 
 @NgModule({
