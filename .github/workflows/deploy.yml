@@ -15,7 +15,7 @@ jobs:
         run: npm ci
       - name: Build 🏗️
         working-directory: ./frontend
-        run: npm run build -- --output-path ./dist
+        run: npm run build -- --output-path ./dist --base-href https://mmosiur.github.io/appollo/
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
