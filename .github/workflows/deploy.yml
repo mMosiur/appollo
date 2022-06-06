@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install and Build 🔧
-        working-directory: frontent
+        working-directory: ./frontend
         run: |
           npm ci
           npm run build --prod
@@ -20,4 +20,4 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
           branch: gh-pages # The branch the action should deploy to.
-          folder: frontent/dist # The folder the action should deploy.
+          folder: ./frontend/dist # The folder the action should deploy.
