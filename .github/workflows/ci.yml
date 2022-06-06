@@ -31,10 +31,10 @@ jobs:
       with:
         node-version: '16.x'
     - name: Install dependencies
-      working-directory: ./frontent
+      working-directory: ./frontend
       run: npm ci
     - name: Build project
-      working-directory: ./frontent
+      working-directory: ./frontend
       run: npm run build --if-present
     - name: Run tests
       working-directory: ./frontend
