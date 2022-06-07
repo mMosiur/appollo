@@ -13,6 +13,7 @@ import org.umcs.appollo.converters.QuestionConverter;
 import org.umcs.appollo.model.AnswerEntity;
 import org.umcs.appollo.model.PollEntity;
 import org.umcs.appollo.model.QuestionEntity;
+import org.umcs.appollo.model.UserEntity;
 import org.umcs.appollo.model.api.Answer;
 import org.umcs.appollo.model.api.Poll;
 import org.umcs.appollo.model.api.Question;
@@ -51,6 +52,7 @@ public class AnswersServiceTests {
     private Poll pollDetails;
     private QuestionEntity questionEntity;
     private AnswerEntity answerEntity;
+    private UserEntity userEntity;
 
     private QuestionConverter questionConverter;
 
@@ -62,9 +64,18 @@ public class AnswersServiceTests {
 
         questionConverter = new QuestionConverter();
 
+        userEntity = new UserEntity();
+        userEntity.setId(1);
+        userEntity.setUsername("user123");
+        userEntity.setPassword("pass123");
+        userEntity.setEmail("test@test.com");
+        userEntity.setFirstName("Vuko");
+        userEntity.setLastName("Drakkainen");
+
         pollEntity = new PollEntity();
         pollEntity.setId(1);
         pollEntity.setName("test");
+        pollEntity.setUser(userEntity);
 
         pollDetails = new Poll();
         pollDetails.setId(1);
@@ -81,6 +92,7 @@ public class AnswersServiceTests {
         answerEntity = new AnswerEntity();
         answerEntity.setId(1);
         answerEntity.setAnswerJson("Blue");
+        answerEntity.setUser(userEntity);
 
         List<QuestionEntity> questionEntitiesList = new LinkedList<>();
         questionEntitiesList.add(questionEntity);
@@ -105,8 +117,7 @@ public class AnswersServiceTests {
         assertThat(answers).isNotEmpty();
     }
 
-    // TODO: 06.06.2022 poprawa testu aby dodac wczesniej uzytkownika
-  /*  @Test
+    @Test
     public void addAnswerSuccess(){
         List<Answer> answers = new ArrayList<>();
         Answer answerDetails = answerConverter.FromEntityToApi(answerEntity);
@@ -117,6 +128,8 @@ public class AnswersServiceTests {
 
         given(pollRepository.findById(1)).willReturn(Optional.of(pollEntity));
         given(questionRepository.findById(1)).willReturn(Optional.of(questionEntity));
+        given(userRepository.existsById(1)).willReturn(true);
+        given(userRepository.getById(1)).willReturn(userEntity);
         when(answerRepository.saveAll(any(List.class))).thenReturn(answersEntities);
 
         List<Answer> answerDetailsTest = answersService.addPollAnswers(1, answers,1);
@@ -125,5 +138,5 @@ public class AnswersServiceTests {
         assertThat(answerDetailsTest.get(0).getId()).isEqualTo(1);
         assertThat(answerDetailsTest.get(0).getQuestionId()).isEqualTo(1);
         assertThat(answerDetailsTest.get(0).getAnswerJson()).isEqualTo("Blue");
-    } */
+    }
 }

@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,6 +22,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/api/")
 public class PollController implements PollsApi {
 
@@ -48,7 +50,7 @@ public class PollController implements PollsApi {
                                     .getUsername())
                             .getId());
 
-        }catch(ResponseStatusException ex){
+        } catch (ResponseStatusException ex) {
             throw new RuntimeException(ex.getMessage());
         }
         return new ResponseEntity<>(pollService.getPoll(createdPoll.getId()), HttpStatus.CREATED);
@@ -57,9 +59,9 @@ public class PollController implements PollsApi {
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deletePollById(Integer id) {
-        try{
+        try {
             pollService.deletePoll(id);
-        }catch(ResponseStatusException ex){
+        } catch (ResponseStatusException ex) {
             throw new RuntimeException(ex.getMessage());
         }
         return ResponseEntity.noContent().build();
@@ -68,9 +70,9 @@ public class PollController implements PollsApi {
     @Override
     public ResponseEntity<List<Answer>> getAnswersToPollById(Integer id) {
         List<Answer> answers;
-        try{
+        try {
             answers = answersService.getAnswersForPoll(id);
-        }catch(ResponseStatusException ex){
+        } catch (ResponseStatusException ex) {
             throw new RuntimeException(ex.getMessage());
         }
         return ResponseEntity.ok().body(answers);
@@ -79,10 +81,10 @@ public class PollController implements PollsApi {
     @Override
     public ResponseEntity<Poll> getPollById(Integer id) {
         Poll poll;
-        try{
+        try {
             poll = pollService.getPoll(id);
 
-        }catch(ResponseStatusException ex){
+        } catch (ResponseStatusException ex) {
             throw new RuntimeException(ex.getMessage());
         }
         return ResponseEntity.ok().body(poll);
@@ -93,7 +95,7 @@ public class PollController implements PollsApi {
         List<PollLabel> polls;
         try {
             polls = pollService.getPolls();
-        } catch(ResponseStatusException ex) {
+        } catch (ResponseStatusException ex) {
             throw new RuntimeException(ex.getMessage());
         }
         return ResponseEntity.ok().body(polls);
@@ -106,14 +108,13 @@ public class PollController implements PollsApi {
         try {
             addPollAnswers = answersService.addPollAnswers(id, filledPoll,
                     userService.findOne(
-                            ((User)SecurityContextHolder
+                            ((User) SecurityContextHolder
                                     .getContext()
                                     .getAuthentication()
                                     .getPrincipal())
                                     .getUsername())
-                            .getId()
-            );
-        } catch(ResponseStatusException ex) {
+                            .getId());
+        } catch (ResponseStatusException ex) {
             throw new RuntimeException(ex.getMessage());
         }
         return ResponseEntity.ok().body(addPollAnswers);
@@ -124,7 +125,7 @@ public class PollController implements PollsApi {
     public ResponseEntity<Poll> updatePoll(Integer id, @Valid Poll pollDetails) {
         try {
             pollDetails = pollService.updatePoll(id, pollDetails);
-        } catch(ResponseStatusException ex) {
+        } catch (ResponseStatusException ex) {
             throw new RuntimeException(ex.getMessage());
         }
         return ResponseEntity.ok().body(pollDetails);

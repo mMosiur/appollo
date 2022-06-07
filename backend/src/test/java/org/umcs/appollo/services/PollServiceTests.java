@@ -110,6 +110,7 @@ public class PollServiceTests {
 
     @Test
     public void deletePollCorrect(){
+        given(pollRepository.existsById(1)).willReturn(true);
         given(pollRepository.getById(1)).willReturn(pollEntity);
         given(pollRepository.existsById(1)).willReturn(true);
 
