@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.umcs.appollo.api.PollsApi;
 import org.umcs.appollo.model.PollEntity;
-import org.umcs.appollo.model.UserEntity;
 import org.umcs.appollo.model.api.Answer;
 import org.umcs.appollo.model.api.Poll;
 import org.umcs.appollo.model.api.PollLabel;
@@ -40,7 +39,14 @@ public class PollController implements PollsApi {
     public ResponseEntity<Poll> createPoll(@Valid Poll poll) {
         PollEntity createdPoll;
         try{
-            createdPoll = pollService.createPoll(poll);
+            createdPoll = pollService.createPoll(poll,
+                    userService.findOne(
+                            ((User)SecurityContextHolder
+                                    .getContext()
+                                    .getAuthentication()
+                                    .getPrincipal())
+                                    .getUsername())
+                            .getId());
 
         }catch(ResponseStatusException ex){
             throw new RuntimeException(ex.getMessage());
