@@ -7,6 +7,6 @@ import org.umcs.appollo.model.api.User;
 
 
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
-    @Query( value = "SELECT u from User u where u.username = ?1")
+    @Query( value = "SELECT u from Users u where u.username = ?1")
     UserEntity findByUsername(String username);
 }
