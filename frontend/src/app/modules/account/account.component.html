@@ -1,1 +1,14 @@
-<p>Nothing to look for here at the moment</p>
+<div class="center container">
+  <h1 class="center-text">Account</h1>
+  <ng-container *ngIf="user; then thenBlock; else elseBlock"></ng-container>
+  <ng-template #thenBlock>
+    <p>Welcome, <em>{{user?.username}}.</em></p>
+    <button type="button" mat-raised-button color="primary" (click)="onLogoutClick()">Logout</button>
+  </ng-template>
+  <ng-template #elseBlock>
+    <p>You are not logged in.</p>
+    <a mat-raised-button color="primary" href="account/login">Login</a>
+    <p></p>
+    <a mat-raised-button color="primary" href="account/register">Register</a>
+  </ng-template>
+</div>

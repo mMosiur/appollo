@@ -1,1 +1,38 @@
-<p>register works!</p>
+<form class="center container" (submit)="onSubmit($event)">
+
+  <mat-form-field appearance="outline">
+    <mat-label >Username</mat-label>
+    <input matInput required type="text" name="username" [(ngModel)]="username" title="Username form field">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Password</mat-label>
+    <input matInput required type="password" name="password" [(ngModel)]="password" title="Password form field">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label >First name</mat-label>
+    <input matInput required type="text" name="first-name" [(ngModel)]="firstname" title="First name form field">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label >Last name</mat-label>
+    <input matInput required type="text" name="last-name" [(ngModel)]="lastname" title="Last name form field">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label >Email</mat-label>
+    <input matInput required type="email" name="email" [(ngModel)]="email" title="Email form field">
+  </mat-form-field>
+
+  <button type="submit" mat-raised-button color="primary">
+    Register
+  </button>
+
+  <ng-container *ngIf="waiting">
+    <mat-progress-spinner mode="indeterminate" class="center spinner"></mat-progress-spinner>
+  </ng-container>
+
+  <p *ngIf="status">{{status}}</p>
+
+</form>

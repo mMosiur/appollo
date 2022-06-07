@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { AccountService } from './shared/services/account.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './shared/helpers/jwt.interceptor';
+import { AuthGuard } from './shared/helpers/auth.guard';
 
 @NgModule({
   declarations: [
@@ -19,9 +20,10 @@ import { JwtInterceptor } from './shared/helpers/jwt.interceptor';
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [
+    AuthGuard,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     AccountService,
   ],

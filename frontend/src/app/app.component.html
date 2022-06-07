@@ -7,7 +7,7 @@
   <ng-container *ngIf="getUser(); else elseBlock">
     <span>Hello <em>{{getUser()?.username}}!</em></span>
     <span class="toolbar-spacer"></span>
-    <button mat-raised-button color="primary" class="nav-button" (click)="onClickLogOut()">
+    <button type="button" mat-raised-button color="primary" class="nav-button" (click)="onClickLogOut()">
       LogOut
     </button>
   </ng-container>

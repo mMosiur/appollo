@@ -16,13 +16,12 @@ import { NumberQuestionComponent } from './question/number-question/number-quest
 import { QuestionComponent } from './question/question.component';
 import { RadioQuestionComponent } from './question/radio-question/radio-question.component';
 import { TextQuestionComponent } from './question/text-question/text-question.component';
-import { AnswerPollComponent } from './answer-poll.component';
-import { RouterModule, Routes } from '@angular/router';
+import { AnswerPollComponent } from './components/answer-poll/answer-poll.component';
 import { PollService } from 'src/app/shared/services/poll.service';
-
-const routes: Routes = [
-  { path: ':id', component: AnswerPollComponent }
-];
+import { PollListComponent } from './components/poll-list/poll-list.component';
+import { AnswerPollRoutingModule } from './answer-poll-routing.module';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -33,11 +32,12 @@ const routes: Routes = [
     CheckboxQuestionComponent,
     EmailQuestionComponent,
     DatetimeQuestionComponent,
-    NumberQuestionComponent
+    NumberQuestionComponent,
+    PollListComponent,
   ],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes),
+    AnswerPollRoutingModule,
     FormsModule,
     MatInputModule,
     MatInputModule,
@@ -47,7 +47,9 @@ const routes: Routes = [
     MatNativeDateModule,
     MatGridListModule,
     MatProgressSpinnerModule,
-    MatButtonModule
+    MatButtonModule,
+    MatListModule,
+    MatIconModule,
   ],
   providers: [
     PollService
