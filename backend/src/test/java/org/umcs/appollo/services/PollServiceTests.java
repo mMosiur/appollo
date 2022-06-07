@@ -99,7 +99,6 @@ public class PollServiceTests {
     @Test
     public void createPollCorrect(){
         when(pollRepository.save(any(PollEntity.class))).thenReturn(pollEntity);
-        when(questionRepository.saveAll(pollEntity.getQuestions())).thenReturn(pollEntity.getQuestions());
 
         PollEntity pollEntityTest = pollService.createPoll(pollDetails);
 
@@ -111,6 +110,7 @@ public class PollServiceTests {
 
     @Test
     public void deletePollCorrect(){
+        given(pollRepository.existsById(1)).willReturn(true);
         given(pollRepository.getById(1)).willReturn(pollEntity);
 
         pollService.deletePoll(1);
@@ -120,11 +120,10 @@ public class PollServiceTests {
 
     @Test
     public void updatePollCorrect(){
-        given(pollRepository.getById(1)).willReturn(pollEntity);
+        given(pollRepository.existsById(1)).willReturn(true);
         pollDetails.setName("test123");
 
         when(pollRepository.save(any(PollEntity.class))).thenReturn(pollConverter.FromApiToEntity(pollDetails));
-        when(questionRepository.saveAll(pollEntity.getQuestions())).thenReturn(pollEntity.getQuestions());
 
         Poll pollDetailsTest = pollService.updatePoll(1, pollDetails);
 
