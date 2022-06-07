@@ -1,16 +1,22 @@
+import { HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { AccountService } from './shared/services/account.service';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        RouterTestingModule,
+        HttpClientModule
       ],
       declarations: [
         AppComponent
       ],
+      providers: [
+        AccountService,
+      ]
     }).compileComponents();
   });
 
@@ -20,9 +26,9 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'appollo'`, () => {
+  it(`should have as title 'apPOLLo'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('appollo');
+    expect(app.title).toEqual('apPOLLo');
   });
 });

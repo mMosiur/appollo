@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -17,13 +16,12 @@ import { NumberQuestionComponent } from './question/number-question/number-quest
 import { QuestionComponent } from './question/question.component';
 import { RadioQuestionComponent } from './question/radio-question/radio-question.component';
 import { TextQuestionComponent } from './question/text-question/text-question.component';
-import { AnswerPollComponent } from './answer-poll.component';
-import { RouterModule, Routes } from '@angular/router';
+import { AnswerPollComponent } from './components/answer-poll/answer-poll.component';
 import { PollService } from 'src/app/shared/services/poll.service';
-
-const routes: Routes = [
-  { path: '', component: AnswerPollComponent }
-];
+import { PollListComponent } from './components/poll-list/poll-list.component';
+import { AnswerPollRoutingModule } from './answer-poll-routing.module';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -34,11 +32,12 @@ const routes: Routes = [
     CheckboxQuestionComponent,
     EmailQuestionComponent,
     DatetimeQuestionComponent,
-    NumberQuestionComponent
+    NumberQuestionComponent,
+    PollListComponent,
   ],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes),
+    AnswerPollRoutingModule,
     FormsModule,
     MatInputModule,
     MatInputModule,
@@ -47,9 +46,10 @@ const routes: Routes = [
     MatDatepickerModule,
     MatNativeDateModule,
     MatGridListModule,
-    HttpClientModule,
     MatProgressSpinnerModule,
-    MatButtonModule
+    MatButtonModule,
+    MatListModule,
+    MatIconModule,
   ],
   providers: [
     PollService
