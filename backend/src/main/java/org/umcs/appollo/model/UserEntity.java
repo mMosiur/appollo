@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 @Entity(name = "User")
-@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = "email"), @UniqueConstraint(columnNames = "username")})
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
