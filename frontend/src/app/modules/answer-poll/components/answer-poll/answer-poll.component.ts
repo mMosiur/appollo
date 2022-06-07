@@ -29,8 +29,8 @@ export class AnswerPollComponent implements OnInit {
       .map((question, i) => {
         const answer = this.answers[i];
         return {
-          questionId: question.id,
-          answerJson: answer
+          question_id: question.id,
+          answer_json: answer
         }
       });
   }
