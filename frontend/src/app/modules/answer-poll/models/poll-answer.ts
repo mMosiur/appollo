@@ -1,4 +1,4 @@
 export default interface PollAnswer {
-  questionId: number;
-  answerJson: string;
+  question_id: number;
+  answer_json: string;
 }
