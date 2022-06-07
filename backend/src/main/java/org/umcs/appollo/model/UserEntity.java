@@ -1,18 +1,17 @@
 package org.umcs.appollo.model;
 
 import javax.persistence.*;
-import java.awt.print.Book;
 import java.util.List;
 import java.util.Set;
 
-@Entity(name = "User")
+@Entity(name = "Users")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
     private Integer id;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
     @Column(name = "first_name", nullable = false)
@@ -21,7 +20,7 @@ public class UserEntity {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false)
