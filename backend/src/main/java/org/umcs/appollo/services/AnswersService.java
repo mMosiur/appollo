@@ -52,14 +52,27 @@ public class AnswersService {
     public List<Answer> addPollAnswers(Integer id, List<Answer> answers, Integer user_id) {
         Optional<PollEntity> result = pollRepository.findById(id);
         List<AnswerEntity> answersEntities;
-        // TODO: 05.06.2022 walidacja czy pytanie istnieje w dany pollu
         try {
             if (result.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poll with id " + id + " not found.");
             }
             answersEntities = answers
                 .stream()
-                .map(q -> enrichAnswerWithQuestionInfo(q, user_id))
+                .map(q -> {
+                    int questionId = q.getQuestionId();
+                    if (!questionRepository.existsById(questionId))
+                        throw new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Cannot post answer to question of id " + questionId + " because it doesn't exist.");
+
+                    QuestionEntity targetQuestion = questionRepository.getById(q.getQuestionId());
+                    if (targetQuestion.getPoll().getId() != id.intValue())
+                        throw new ResponseStatusException(
+                                HttpStatus.CONFLICT,
+                                "Question of id " + questionId + " does not belong to poll of id " + id + "."
+                        );
+                    return enrichAnswerWithQuestionInfo(q, user_id);
+                })
                 .collect(Collectors.toList());
             answersEntities = answerRepository.saveAll(answersEntities);
         } catch (ResponseStatusException ex) {

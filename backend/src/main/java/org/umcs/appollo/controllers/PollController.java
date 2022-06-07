@@ -40,8 +40,15 @@ public class PollController implements PollsApi {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Poll> createPoll(@Valid Poll poll) {
         PollEntity createdPoll;
-        try {
-            createdPoll = pollService.createPoll(poll);
+        try{
+            createdPoll = pollService.createPoll(poll,
+                    userService.findOne(
+                            ((User)SecurityContextHolder
+                                    .getContext()
+                                    .getAuthentication()
+                                    .getPrincipal())
+                                    .getUsername())
+                            .getId());
 
         } catch (ResponseStatusException ex) {
             throw new RuntimeException(ex.getMessage());

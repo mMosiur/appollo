@@ -13,6 +13,7 @@ import org.umcs.appollo.model.api.PollLabel;
 import org.umcs.appollo.model.api.Question;
 import org.umcs.appollo.repository.PollRepository;
 import org.umcs.appollo.repository.QuestionRepository;
+import org.umcs.appollo.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,24 +24,23 @@ import java.util.stream.Collectors;
 public class PollService {
     private final PollRepository pollRepository;
     private final PollConverter pollConverter;
-    private final QuestionRepository questionRepository;
     private final QuestionConverter questionConverter;
+    private final UserRepository userRepository;
 
     public PollService(PollRepository pollRepository, PollConverter pollConverter,
-            QuestionRepository questionRepository, QuestionConverter questionConverter) {
+                       QuestionConverter questionConverter, UserRepository userRepository) {
         this.pollRepository = pollRepository;
         this.pollConverter = pollConverter;
-        this.questionRepository = questionRepository;
         this.questionConverter = questionConverter;
+        this.userRepository = userRepository;
     }
 
     public List<PollLabel> getPolls() {
-        List<PollLabel> pollList = pollRepository
+        return pollRepository
                 .findAll()
                 .stream()
                 .map(pollConverter::FromEntityToApi)
                 .collect(Collectors.toList());
-        return pollList;
     }
 
     public Poll getPoll(Integer id) {
@@ -52,13 +52,13 @@ public class PollService {
         return pollConverter.FromEntityToApiDetailed(pollEntity);
     }
 
-    public PollEntity createPoll(Poll poll) {
+    public PollEntity createPoll(Poll poll, int owner_id) {
         PollEntity pollEntity = pollConverter.FromApiToEntity(poll);
         if (pollEntity == null)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Poll not found");
 
         pollEntity.setId(null);
-        // TODO: 05.06.2022 DODANIE UZYTKOWNIKA 
+        pollEntity.setUser(userRepository.getById(owner_id));
         pollEntity.setQuestions(null);
         pollEntity = pollRepository.save(pollEntity);
         List<QuestionEntity> questionEntities = new ArrayList<>();

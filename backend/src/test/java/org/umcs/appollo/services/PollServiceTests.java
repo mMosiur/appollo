@@ -16,7 +16,7 @@ import org.umcs.appollo.model.api.Poll;
 import org.umcs.appollo.model.api.PollLabel;
 import org.umcs.appollo.model.api.Question;
 import org.umcs.appollo.repository.PollRepository;
-import org.umcs.appollo.repository.QuestionRepository;
+import org.umcs.appollo.repository.UserRepository;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class PollServiceTests {
     @Mock
     private QuestionConverter questionConverter;
     @Mock
-    private QuestionRepository questionRepository;
+    private UserRepository userRepository;
     @InjectMocks
     PollService pollService;
 
@@ -47,10 +47,10 @@ public class PollServiceTests {
 
     @Before
     public void setup(){
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         questionConverter = new QuestionConverter();
         pollConverter = new PollConverter(questionConverter);
-        pollService = new PollService(pollRepository, pollConverter, questionRepository,questionConverter);
+        pollService = new PollService(pollRepository, pollConverter, questionConverter, userRepository);
 
         pollEntity = new PollEntity();
         pollEntity.setId(1);
@@ -100,7 +100,7 @@ public class PollServiceTests {
     public void createPollCorrect(){
         when(pollRepository.save(any(PollEntity.class))).thenReturn(pollEntity);
 
-        PollEntity pollEntityTest = pollService.createPoll(pollDetails);
+        PollEntity pollEntityTest = pollService.createPoll(pollDetails, 0);
 
         assertThat(pollEntityTest).isNotNull();
         assertThat(pollEntityTest.getQuestions()).isNotEmpty();
@@ -112,6 +112,7 @@ public class PollServiceTests {
     public void deletePollCorrect(){
         given(pollRepository.existsById(1)).willReturn(true);
         given(pollRepository.getById(1)).willReturn(pollEntity);
+        given(pollRepository.existsById(1)).willReturn(true);
 
         pollService.deletePoll(1);
 
