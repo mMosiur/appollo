@@ -1,4 +1,7 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { AccountService } from 'src/app/shared/services/account.service';
 
 import { AccountComponent } from './account.component';
 
@@ -8,7 +11,16 @@ describe('AccountComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AccountComponent ]
+      imports: [
+        RouterTestingModule,
+        HttpClientModule,
+      ],
+      declarations: [
+        AccountComponent,
+      ],
+      providers: [
+        AccountService,
+      ],
     })
     .compileComponents();
   });

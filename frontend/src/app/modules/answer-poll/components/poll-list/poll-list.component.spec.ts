@@ -1,4 +1,6 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { PollService } from 'src/app/shared/services/poll.service';
 
 import { PollListComponent } from './poll-list.component';
 
@@ -8,7 +10,15 @@ describe('PollListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PollListComponent ]
+      imports: [
+        HttpClientModule
+      ],
+      declarations: [
+        PollListComponent,
+      ],
+      providers: [
+        PollService,
+      ],
     })
     .compileComponents();
   });

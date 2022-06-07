@@ -1,4 +1,7 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { AccountService } from 'src/app/shared/services/account.service';
 
 import { LoginComponent } from './login.component';
 
@@ -8,9 +11,18 @@ describe('LoginComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LoginComponent ]
+      imports: [
+        RouterTestingModule,
+        HttpClientModule,
+      ],
+      declarations: [
+        LoginComponent,
+      ],
+      providers: [
+        AccountService,
+      ],
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
