@@ -14,18 +14,16 @@ public class AnswerEntity {
     @Column(name = "answerJson", nullable = false)
     private String answerJson;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id", nullable = false)
     private QuestionEntity question;
 
-    // TODO: 06.06.2022 KASKADOWOSC DO ZMIANY  
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    public AnswerEntity() {
+    public AnswerEntity() {}
 
-    }
 
     public AnswerEntity(String answerJson) {
         this.answerJson = answerJson;

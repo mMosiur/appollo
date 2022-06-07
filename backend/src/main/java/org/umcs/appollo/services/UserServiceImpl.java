@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.umcs.appollo.configuration.RoleNames;
 import org.umcs.appollo.converters.UserConverter;
+import org.umcs.appollo.model.AnswerEntity;
 import org.umcs.appollo.model.RoleEntity;
 import org.umcs.appollo.model.UserEntity;
 import org.umcs.appollo.model.api.User;
@@ -115,10 +116,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         if(!userRepository.existsById(id))
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poll with id " + id + " not found.");
         else
-        {
-            for (RoleEntity role : user.getRoles())
-                user.removeRole(role);
             userRepository.delete(user);
-        }
+
+
     }
 }
