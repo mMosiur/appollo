@@ -9,6 +9,6 @@ Cały kontrolowany proces tworzenia aplikacji odbywał się za pośrednictwem Gi
 CI oraz CD oraz wykorzystując system zarządzania gałęziami Gitflow.
 
 # Przeznaczenie działania naszego REST Api
-Głównum zadaniem naszego Api jest obsługa  potencjalnej aplikacji webowej której zadaniem byłoby tworzenie ankiet, wypełnianie ich i tym samym dostarczenie informacji o podanych odpowiedziach do każdej ankiety. Wszystko jest możliwe dla podstawowych użytkowników zalogowanych którzy mogą wypełniać ankiety zaś administratorzy aplikacji są w stanie tworzyć nowe ankiety, modyfikować je bąć też usuwać.
+Głównym zadaniem naszego Api jest obsługa  potencjalnej aplikacji webowej której zadaniem byłoby tworzenie ankiet, wypełnianie ich i tym samym dostarczenie informacji o podanych odpowiedziach do każdej ankiety. Wszystko jest możliwe dla podstawowych użytkowników zalogowanych którzy mogą wypełniać ankiety zaś administratorzy aplikacji są w stanie tworzyć nowe ankiety, modyfikować je bąć też usuwać.
 
 Więcej szczegółowych informacji o naszej aplikacji w folderze z dokumentacją.
