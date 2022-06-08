@@ -19,7 +19,7 @@ public class QuestionEntity {
     @Column(name = "options", nullable = false)
     private String options;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="poll_id", nullable = false)
     private PollEntity poll;
 
