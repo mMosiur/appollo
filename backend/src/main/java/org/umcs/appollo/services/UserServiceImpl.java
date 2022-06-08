@@ -80,20 +80,30 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public User findOne(int id) {
+        return userConverter.FromEntityToApi(findOneEntity(id));
+    }
+
+    @Override
+    public User findOne(String username) {
+        return userConverter.FromEntityToApi(findOneEntity(username));
+    }
+
+    @Override
+    public UserEntity findOneEntity(int id) {
         try {
-            return userConverter.FromEntityToApi(userRepository.findById(id).orElseThrow());
+            return userRepository.findById(id).orElseThrow();
         } catch (NoSuchElementException e) {
             throw new ResourceNotFoundException( "No user of id " + id + " found.",e.getCause());
         }
     }
 
     @Override
-    public User findOne(String username) {
+    public UserEntity findOneEntity(String username) {
         UserEntity target = userRepository.findByUsername(username);
         if (target == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No user of username " + username + " found.");
 
-        return userConverter.FromEntityToApi(target);
+        return target;
     }
 
     @Override
