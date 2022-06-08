@@ -1,4 +1,8 @@
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { RouterTestingModule } from '@angular/router/testing';
+import { PollService } from 'src/app/shared/services/poll.service';
 
 import { CreatePollComponent } from './create-poll.component';
 
@@ -8,9 +12,21 @@ describe('CreatePollComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CreatePollComponent ]
+      declarations: [
+        CreatePollComponent,
+      ],
+      imports: [
+        MatDialogModule,
+        HttpClientModule,
+        RouterTestingModule,
+      ],
+      providers: [
+        PollService,
+        { provide: MatDialogRef, useValue: {} },
+        { provide: MAT_DIALOG_DATA, useValue: [] },
+      ],
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
