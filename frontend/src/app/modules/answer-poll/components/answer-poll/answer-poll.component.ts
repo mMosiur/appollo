@@ -11,6 +11,10 @@ import { PollAnswer } from '../../models/poll-answer';
 })
 export class AnswerPollComponent implements OnInit {
 
+  submitted: boolean = false;
+
+  status: string = '';
+
   @Input() id: number | null = null;
 
   title = 'apPOLLo';
@@ -54,13 +58,28 @@ export class AnswerPollComponent implements OnInit {
     this.answers[index] = value;
   }
 
+  public get canSubmit() : boolean {
+    return !this.submitted && this.isPollFilledIn();
+  }
+
   submit() {
+    if (this.submitted) {
+      throw new Error('Answers have already been submitted');
+    }
     if (!this.poll) {
       throw new Error('Poll is not loaded yet');
     }
+    console.log('submit');
     this.pollService.sendPollAnswers(this.poll.id, this.getPollAnswers()).subscribe({
-      next: (data) => {console.log('success')},
-      error: () => {console.error('error')}
+      next: (data) => {
+        this.submitted = true;
+        this.status = 'Poll answers submitted successfully!';
+        console.log('ok');
+      },
+      error: (err) => {
+        console.error('error');
+        this.status = `Error during answers submit: ${err}`;
+      }
     });
   }
 

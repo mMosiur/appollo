@@ -22,13 +22,6 @@ export class AccountService {
   }
 
   login(username: string, password: string): Observable<User> {
-    // mock
-    const user = {
-      username: username,
-      token: `token${username}${password}`
-    };
-    localStorage.setItem('user', JSON.stringify(user));
-    return of(user);
     return this.http.post<LoginResponse>(`${environment.apiUrl}/users/login`, { username, password })
       .pipe(map(response => {
         // store user details and jwt token in local storage to keep user logged in between page refreshes
