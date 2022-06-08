@@ -9,9 +9,9 @@ const createModule = () => import('./modules/create-poll/create-poll.module').th
 
 const routes: Routes = [
   { path: '', loadChildren: homeModule },
-  { path: 'poll', loadChildren: answerPollModule, canActivate: [AuthGuard] },
   { path: 'account', loadChildren: accountModule },
-  { path: 'create', loadChildren: createModule },
+  { path: 'poll', loadChildren: answerPollModule, canActivate: [AuthGuard] },
+  { path: 'create', loadChildren: createModule, canActivate: [AuthGuard] },
   // otherwise redirect to home
   { path: '**', redirectTo: '' }
 ];
