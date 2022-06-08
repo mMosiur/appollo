@@ -3,6 +3,7 @@ name: Deploy frontend
 on:
   push:
     branches: [ develop ]
+    paths: frontend/**
   workflow_dispatch:
 
 jobs:
