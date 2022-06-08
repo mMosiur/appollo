@@ -301,7 +301,7 @@ paths:
               $ref: '#/components/schemas/UserLoginAttempt'
         required: true
       responses:
-        '204':
+        '200':
           description: User successfully logged in.
           content:
             application/json:

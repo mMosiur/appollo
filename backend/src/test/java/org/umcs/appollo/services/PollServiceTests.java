@@ -16,6 +16,7 @@ import org.umcs.appollo.model.api.Poll;
 import org.umcs.appollo.model.api.PollLabel;
 import org.umcs.appollo.model.api.Question;
 import org.umcs.appollo.repository.PollRepository;
+import org.umcs.appollo.repository.QuestionRepository;
 import org.umcs.appollo.repository.UserRepository;
 
 import java.util.LinkedList;
@@ -32,6 +33,8 @@ public class PollServiceTests {
     private PollRepository pollRepository;
     @Mock
     private PollConverter pollConverter;
+    @Mock
+    private QuestionRepository questionRepository;
     @Mock
     private QuestionConverter questionConverter;
     @Mock
@@ -50,7 +53,7 @@ public class PollServiceTests {
         MockitoAnnotations.openMocks(this);
         questionConverter = new QuestionConverter();
         pollConverter = new PollConverter(questionConverter);
-        pollService = new PollService(pollRepository, pollConverter, questionConverter, userRepository);
+        pollService = new PollService(pollRepository, pollConverter, questionRepository, questionConverter, userRepository);
 
         pollEntity = new PollEntity();
         pollEntity.setId(1);

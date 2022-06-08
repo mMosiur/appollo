@@ -10,6 +10,7 @@ import org.umcs.appollo.model.api.Poll;
 import org.umcs.appollo.model.api.PollLabel;
 import org.umcs.appollo.model.api.Question;
 import org.umcs.appollo.repository.PollRepository;
+import org.umcs.appollo.repository.QuestionRepository;
 import org.umcs.appollo.repository.UserRepository;
 
 import java.util.ArrayList;
@@ -21,13 +22,16 @@ import java.util.stream.Collectors;
 public class PollService {
     private final PollRepository pollRepository;
     private final PollConverter pollConverter;
+    private final QuestionRepository questionRepository;
     private final QuestionConverter questionConverter;
     private final UserRepository userRepository;
 
     public PollService(PollRepository pollRepository, PollConverter pollConverter,
-                       QuestionConverter questionConverter, UserRepository userRepository) {
+                       QuestionRepository questionRepository, QuestionConverter questionConverter,
+                       UserRepository userRepository) {
         this.pollRepository = pollRepository;
         this.pollConverter = pollConverter;
+        this.questionRepository = questionRepository;
         this.questionConverter = questionConverter;
         this.userRepository = userRepository;
     }
@@ -55,13 +59,7 @@ public class PollService {
         pollEntity.setUser(userRepository.getById(owner_id));
         pollEntity.setQuestions(null);
         pollEntity = pollRepository.save(pollEntity);
-        List<QuestionEntity> questionEntities = new ArrayList<>();
-        for (Question question : poll.getQuestions()) {
-            QuestionEntity questionEntity = questionConverter.FromApiToEntity(question);
-            questionEntity.setPoll(pollEntity);
-            questionEntities.add(questionEntity);
-        }
-        pollEntity.setQuestions(questionEntities);
+        createAndSetQuestionEntitiesToPollEntity(poll, pollEntity);
         return pollRepository.save(pollEntity);
     }
 
@@ -77,13 +75,21 @@ public class PollService {
         if (!pollRepository.existsById(id))
             throw new ResourceNotFoundException( "No poll of id " + id + " found.");
 
-        PollEntity newPollEntity = pollConverter.FromApiToEntity(newPoll);
+        PollEntity target = pollRepository.getById(id);
 
-        // TODO: 08.06.2022 kasowanie uzytkownika po update oraz dodaje edytowane pytanie jako zupełnie nowe pytanie
-        for (QuestionEntity question : newPollEntity.getQuestions())
-            question.setPoll(newPollEntity);
-        newPollEntity.setId(id);
-        newPollEntity = pollRepository.save(newPollEntity);
-        return pollConverter.FromEntityToApiDetailed(newPollEntity);
+        questionRepository.deleteAll(target.getQuestions());
+        createAndSetQuestionEntitiesToPollEntity(newPoll, target);
+
+        return pollConverter.FromEntityToApiDetailed(pollRepository.save(target));
+    }
+
+    private void createAndSetQuestionEntitiesToPollEntity(Poll newPoll, PollEntity target) {
+        List<QuestionEntity> questionEntities = new ArrayList<>();
+        for (Question question: newPoll.getQuestions()) {
+            QuestionEntity questionEntity = questionConverter.FromApiToEntity(question);
+            questionEntity.setPoll(target);
+            questionEntities.add(questionEntity);
+        }
+        target.setQuestions(questionEntities);
     }
 }
