@@ -16,12 +16,7 @@ import { Poll } from './models/poll';
 export class CreatePollComponent {
   poll: Poll = {
     name: '',
-    questions: [
-      { type: QuestionType.Text, text: 'a text question' },
-      { type: QuestionType.Text, text: 'another text question', options: undefined },
-      { type: QuestionType.Checkbox, text: 'a checkbox question', options: ['option 1', 'option 2'] },
-      { type: QuestionType.Radio, text: 'a radio question', options: ['option 1', 'option 2'] },
-    ]
+    questions: []
   };
 
   drop(event: CdkDragDrop<string[]>) {
