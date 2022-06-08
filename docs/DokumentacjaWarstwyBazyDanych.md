@@ -1,2 +1,18 @@
-Przy tworzeniu aplikacji do stworzenia całego modelu bazy danych wykorzystaliśmy Spring JPA.
+Przy tworzeniu aplikacji do stworzenia całego modelu bazy danych wykorzystaliśmy bibliotekę Spring JPA, dzięki której stworzyliśmy klasy encji na podstawie, których tworzone są tabele w bazie danych. Na starcie działania naszej aplikacji zostaje wykonany skrypt który dodaje dane do bazy danych odnośnie użytkowników oraz roli. W głównej mierze było to zrobione aby móc sprawniej testować działanie aplikacji.
 # Baza Danych
+Na samym początku używaliśmy do testowania bazy H2 w pliku lub pamięci. Obecnie korzystamy również z bazy Postgres zdeployowanej na serwerze Azure.
+# Schemat Bazy Danych
+Nasza baza danych posiada 5 tabeli. Skupiliśmy się na naszym głównym zagadnieniu czyli ankietach oraz na użytkownikach naszej aplikacji. Poniżej przedstawię króki opis każdej z naszych tabel i ich powiązań. Dokładny schemat można zobaczy na schemacie o nazwie DataBaseModel.jpg który znajduje się w folderze dokumentacji. Każda tabela posiada swoje id jak i powiązania są tworzone po id wybranej tabeli.
+## Users
+Jest to tabela która posiada informacje o naszych użytkownikach takie jak ich imie i nazwisko, email oraz nazwa użytkownika oraz hasło. Na podstawie nazwy użytkownika oraz hasła odbywa się walidacja przy logowaniu. W tej tabeli zawarte jest również połączenie one-to-many z tabelą Poll oraz Answer. Oznacza to że jeden użytkownik który stworzy ankiete jest z nią powiązywany oraz identycznie przy dodaniu odpowiedzi do ankiety. Jeden użytkownik może posiadać wiele odpowiedzi lub ankiet natomiast one mogę posiadać tylko jednego użytkownika. Użytkownik posiada również połączenie many-to-many z tabela Role. Mówi to o tym, że użytkownik może posiadać wiele ról jak i ta sama rola może być przypisana do wielu użytkowników.
+## Role
+Jest to tabela która przechowuje role zdefiniowane w aplikacji oraz ich opisy. Ta tabela jest połączona z tabelą Users jak wcześniej zostało to opisane. Akutalnie mamy zdefiniowane dwie role Admin i User które są dodawane na starcie aplikacji.
+## Poll
+Jest to tabela która przechowuje informacje o ankiecie jak i jej powiązania z pytaniami. Oprócz numeru id posiada ona nazwę ankiety, połączenie many-to-one z tabelą Users o którym już wcześniej wspomniano oraz połączenie one-to-many z tabelą Question. Co oznacza, że każda ankieta jest połączona z przynjamniej jednym pytaniem.
+## Question
+Jest to tabela która przechowuje informacje o pytaniu w ankiecie jak i powiązania z jego odpowiedziami od różnych użytkowników. Posiada ona atrybuty takie jak tekst pytania, typ pytania(np. text, radio button etc) i opcje(jako tablica string'ów) które są skierowane do rzeczy takich właśnie jak radio button posiadający wiele opcji do wyboru. Oprócz tych atrybutów ta tabela posiada również dwa powiązania z innymi. O jednym już zostało wspomniane i jest to połączenie z tabelą Poll jako many-to-one, natomiast drugie jest z tabelą Answer jako powiązanie one-to-many czyli jedno pytanie może posiadać wiele odpowiedzi od różnych użytkowników natomiast jedna odpowiedź może mieć tylko jedno pytanie.
+## Answer
+Jest to tabela która przechowuje informacje o odpowiedziach do pytań jak i powiązania z ich pytaniem oraz użytkownikiem który je dodał. Posiada ona oprócz tych powiązań które już zostały omówione także atrybut który przechowuje odpowiedź na dane pytanie w formacie JSON. Jest to tak zorganizowane dlatego, że odpowiedź na jedno pytanie może być bardziej złożona ponieważ to jest dla przykładu pytanie z odpowiedziami typu radio button.
+
+Każdy obiekt, który występuje w bazie danych w tych tabelach jeżeli ma być sprawdzony lub wyłuskany do wysłania przez Api, jest konwertowany przez nasze klasy konwerterów na klasę modelu Api i potem obsługiwany.
+
