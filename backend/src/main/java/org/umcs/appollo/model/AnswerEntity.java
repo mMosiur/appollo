@@ -1,7 +1,5 @@
 package org.umcs.appollo.model;
 
-import com.sun.xml.bind.v2.TODO;
-
 import javax.persistence.*;
 
 @Entity(name = "Answer")

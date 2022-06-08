@@ -79,23 +79,15 @@ public class UserController implements UsersApi {
 
     @Override
     public ResponseEntity<User> editUserById(Integer id, User user) {
-        User editedUser;
-        try {
-             editedUser = userService.edit(id, user);
-        } catch(ResponseStatusException ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
+        User editedUser = userService.edit(id, user);
         return ResponseEntity.ok().body(editedUser);
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> getUserById(Integer id) {
         User user;
-        try{
-            user = userService.findOne(id);
-        }catch(ResponseStatusException ex){
-            throw new RuntimeException(ex.getMessage());
-        }
+        user = userService.findOne(id);
         return ResponseEntity.ok().body(user);
     }
 

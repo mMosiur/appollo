@@ -45,8 +45,6 @@ public class PollConverter {
     }
 
     public PollEntity FromApiToEntity(Poll poll) {
-        if (poll == null)
-            return null;
         PollEntity pollEntity = new PollEntity();
         pollEntity.setId(poll.getId());
         List<QuestionEntity> questions = poll.getQuestions()
