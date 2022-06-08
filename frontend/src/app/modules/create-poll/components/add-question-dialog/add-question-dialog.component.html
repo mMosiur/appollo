@@ -1,0 +1,39 @@
+<h1 mat-dialog-title>New question</h1>
+<div mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Question type</mat-label>
+    <mat-select [(value)]="question.type">
+      <mat-option *ngFor="let type of questionTypes" [value]="type">
+        {{ type | titlecase }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Question text</mat-label>
+    <input type="text" matInput required [(ngModel)]="question.text">
+  </mat-form-field>
+  <ng-container *ngIf="hasOptions">
+    <p>Options:</p>
+    <ul>
+      <li *ngFor="let option of question.options; index as i">
+        {{ option }} <button mat-icon-button color="warn" (click)="removeOption(i)">
+          <mat-icon>remove</mat-icon>
+        </button>
+      </li>
+    </ul>
+    <div class="container">
+      <mat-form-field style="width: 80%;" appearance="fill">
+        <mat-label>New option</mat-label>
+        <input type="text" matInput [(ngModel)]="newOption" (keyup.enter)="onAddOptionClick()">
+      </mat-form-field>
+      <button type="submit" mat-mini-fab color="primary" (click)="onAddOptionClick()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </ng-container>
+</div>
+<div mat-dialog-actions class="button-group">
+  <button mat-raised-button color="warn" (click)="onDiscardClick()">Discard</button>
+  <button mat-raised-button color="primary" [disabled]="!canAdd" [mat-dialog-close]="buildQuestion()"
+    cdkFocusInitial>Add</button>
+</div>

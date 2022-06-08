@@ -1,0 +1,5 @@
+<h2>Email question</h2>
+<mat-form-field class="full-width" appearance="fill">
+  <mat-label>{{text}}</mat-label>
+  <input matInput placeholder="Email" type="email" email #ctrl="ngModel" required [ngModel]="email" (ngModelChange)="onEmailInputChange($event)" />
+</mat-form-field>

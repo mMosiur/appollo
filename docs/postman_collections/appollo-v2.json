@@ -1,0 +1,814 @@
+{
+	"info": {
+		"_postman_id": "f6532b01-4ed1-4a30-ba6b-15b742adeac3",
+		"name": "Appollo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Post user (Register) - 204",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"FlyingPanda98\",\r\n  \"password\": \"Securepassword1337!\",\r\n  \"firstname\": \"John\",\r\n  \"lastname\": \"Bravo\",\r\n  \"email\": \"flpanda98@site.com\"\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/users",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post user (Register)  - 204 - 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"FlyingPanda982{{$randomCity}}\",\r\n  \"password\": \"Securepassword1337!\",\r\n  \"firstname\": \"John\",\r\n  \"lastname\": \"Bravo\",\r\n  \"email\": \"flpanda982{{$randomCity}}@site.com\"\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/users",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post user (Login) - 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;\r",
+							"var res = pm.response.json();\r",
+							"console.log(res);\r",
+							"pm.environment.set('token', res.value);\r",
+							"console.log(pm.environment.get(\"token\"));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"FlyingPanda98\",\r\n  \"password\": \"Securepassword1337!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post user (Login)  admin - 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;\r",
+							"var res = pm.response.json();\r",
+							"console.log(res);\r",
+							"pm.environment.set('token', res.value);\r",
+							"console.log(pm.environment.get(\"token\"));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"rocketman\",\r\n  \"password\": \"rakieta\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Get by id - 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;\r",
+							"console.log(pm.environment.get(\"token\"));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_url}}/users/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post poll 1 - 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;",
+							"",
+							"tests[\"Body matches string\"] = responseBody.has(\"Favorite things poll\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Favorite things poll\",\r\n  \"questions\": [\r\n    {\r\n      \"text\": \"What is your favorite color?\",\r\n      \"type\": \"radio\",\r\n      \"options\": [\r\n        \"string\"\r\n      ]\r\n    }\r\n  ]\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/polls",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"polls"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post poll 2 - 201",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;\r",
+							"\r",
+							"var res = pm.response.json();\r",
+							"console.log(res);\r",
+							"pm.environment.set('post_poll_id', res.id);\r",
+							"pm.environment.set('post_question_id', res.questions[0].id);\r",
+							"console.log(pm.environment.get(\"post_poll_id\"));\r",
+							"console.log(pm.environment.get(\"post_question_id\"));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Favorite things poll\",\r\n  \"questions\": [\r\n    {\r\n      \"options\": [\r\n        \"string\"\r\n      ],\r\n      \"text\": \"What is your favorite pet?\",\r\n      \"type\": \"radio\"\r\n    }\r\n  ]\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/polls",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"polls"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all polls - 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;\r",
+							"\r",
+							"console.log(pm.environment.get(\"token\"));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/polls",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"polls"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post poll - 415",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 415\"] = responseCode.code === 415;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Favorite things poll\",\r\n  \"questions\": [\r\n    {\r\n      \"options\": [\r\n        \"string\"\r\n      ],\r\n      \"text\": \"What is your favorite pet?\",\r\n      \"type\": \"radio\"\r\n    }\r\n  ]\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/polls",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"polls"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post poll - 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_url}}/polls",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"polls"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get by id - 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/polls/{{post_poll_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"polls",
+						"{{post_poll_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put - 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"",
+							"",
+							"tests[\"Body matches string\"] = responseBody.has(\"What is your favorite dark color\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Favorite things poll\",\r\n  \"questions\": [\r\n    {\r\n      \"options\": [\r\n        \"string\"\r\n      ],\r\n      \"text\": \"What is your favorite dark color?\",\r\n      \"type\": \"radio\"\r\n    }\r\n  ]\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/polls/{{post_poll_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"polls",
+						"{{post_poll_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put - 200 ",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"",
+							"",
+							"tests[\"Body matches string\"] = responseBody.has(\"What is your favorite animal\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Favorite things poll\",\r\n  \"questions\": [\r\n    {\r\n      \"options\": [\r\n        \"string\"\r\n      ],\r\n      \"text\": \"What is your favorite animal?\",\r\n      \"type\": \"radio\"\r\n    }\r\n  ]\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/polls/{{post_poll_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"polls",
+						"{{post_poll_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post anwser - 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n  {\r\n    \"question_id\": {{post_question_id}},\r\n    \"answer_json\": \"Blue\"\r\n  }\r\n]"
+				},
+				"url": {
+					"raw": "{{base_url}}/polls/{{post_poll_id}}/answers",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"polls",
+						"{{post_poll_id}}",
+						"answers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get anwser - 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/polls/{{post_poll_id}}/answers",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"polls",
+						"{{post_poll_id}}",
+						"answers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete - 204",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_url}}/polls/{{post_poll_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"polls",
+						"{{post_poll_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.sendRequest(\"http://localhost:8080/api/users\", function (err, response) {",
+					"    console.log(response.json());",
+					"});"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080/api",
+			"type": "default"
+		}
+	]
+}

@@ -1,0 +1,411 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Appollo",
+		"_postman_id": "4bef028e-46fb-3ba8-1488-7fe5a6970373",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all polls - 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/polls",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Post poll 1 - 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"tests[\"Body matches string\"] = responseBody.has(\"Favorite things poll\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/polls",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Favorite things poll\",\r\n  \"questions\": [\r\n    {\r\n      \"options\": [\r\n        \"string\"\r\n      ],\r\n      \"text\": \"What is your favorite color?\",\r\n      \"type\": \"radio\"\r\n    }\r\n  ]\r\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Post poll 2 - 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/polls",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Favorite things poll\",\r\n  \"questions\": [\r\n    {\r\n      \"options\": [\r\n        \"string\"\r\n      ],\r\n      \"text\": \"What is your favorite pet?\",\r\n      \"type\": \"radio\"\r\n    }\r\n  ]\r\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Post poll - 415",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 415\"] = responseCode.code === 415;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/polls",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Favorite things poll\",\r\n  \"questions\": [\r\n    {\r\n      \"options\": [\r\n        \"string\"\r\n      ],\r\n      \"text\": \"What is your favorite pet?\",\r\n      \"type\": \"radio\"\r\n    }\r\n  ]\r\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Post poll - 400",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/polls",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Post poll - 500",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 500\"] = responseCode.code === 500;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/polls",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Favorite things poll\",\r\n  \"questions\": [\r\n    {\r\n      \"options\": [\r\n        \"string\"\r\n      ],\r\n      \"text\": \"What is your favorite pet?\"\r\n    }\r\n  ]\r\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get by id - 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/polls/1",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Favorite things poll\",\r\n  \"questions\": [\r\n    {\r\n      \"options\": [\r\n        \"string\"\r\n      ],\r\n      \"text\": \"What is your favorite pet?\"\r\n    }\r\n  ]\r\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get by id - 500",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 500\"] = responseCode.code === 500;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/polls/2",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Favorite things poll\",\r\n  \"questions\": [\r\n    {\r\n      \"options\": [\r\n        \"string\"\r\n      ],\r\n      \"text\": \"What is your favorite pet?\"\r\n    }\r\n  ]\r\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Put - 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"",
+							"",
+							"tests[\"Body matches string\"] = responseBody.has(\"What is your favorite dark color\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/polls/1",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Favorite things poll\",\r\n  \"questions\": [\r\n    {\r\n      \"options\": [\r\n        \"string\"\r\n      ],\r\n      \"text\": \"What is your favorite dark color?\",\r\n      \"type\": \"radio\"\r\n    }\r\n  ]\r\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Put - 200 ",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"",
+							"",
+							"tests[\"Body matches string\"] = responseBody.has(\"What is your favorite animal\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/polls/1",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Favorite things poll\",\r\n  \"questions\": [\r\n    {\r\n      \"options\": [\r\n        \"string\"\r\n      ],\r\n      \"text\": \"What is your favorite animal?\",\r\n      \"type\": \"radio\"\r\n    }\r\n  ]\r\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Post anwser - 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/polls/1/answers",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n  {\r\n    \"answer_json\": \"Blue\",\r\n    \"question_id\": 1\r\n  }\r\n]"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get anwser - 200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/polls/1/answers",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n  {\r\n    \"answer_json\": \"Blue\",\r\n    \"question_id\": 7\r\n  }\r\n]"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete - 204",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/polls/1",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

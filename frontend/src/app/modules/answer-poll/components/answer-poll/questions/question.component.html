@@ -1,0 +1,10 @@
+<ng-container [ngSwitch]="question.type">
+  <em>{{question.id}}</em>
+  <app-text-question *ngSwitchCase="textType" [text]="question.text" (answerChange)="onAnswerChange($event)"></app-text-question>
+  <app-checkbox-question *ngSwitchCase="checkboxType" [text]="question.text" [options]="getOptions()" (answerChange)="onAnswerChange($event)"></app-checkbox-question>
+  <app-radio-question *ngSwitchCase="radioType" [text]="question.text" (answerChange)="onAnswerChange($event)" [options]="getOptions()"></app-radio-question>
+  <app-email-question *ngSwitchCase="emailType" [text]="question.text" (emailChange)="onAnswerChange($event)"></app-email-question>
+  <app-datetime-question *ngSwitchCase="datetimeType" [text]="question.text" (answerChange)="onAnswerChange($event)"></app-datetime-question>
+  <app-number-question *ngSwitchCase="numberType" [text]="question.text" (answerChange)="onAnswerChange($event)"></app-number-question>
+  <h2 *ngSwitchDefault>Unknown question "{{question.type}}"</h2>
+</ng-container>

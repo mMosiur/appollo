@@ -1,0 +1,26 @@
+<ng-container *ngIf="id; else elseBlock">
+  <form class="questions-form">
+    <h1 class="text-center">{{ title }}</h1>
+    <ng-container *ngIf="poll; else elseBlock">
+      <h2 class="text-center">{{ poll.name }}</h2>
+      <hr>
+      <div class="container">
+        <div class="question-field" *ngFor="let question of poll.questions; index as i">
+          <app-question [question]="question" (answerChange)="onAnswerChange(i, $event)"></app-question>
+        </div>
+        <button class="center" type="button" [disabled]="!canSubmit" mat-raised-button color="primary" (click)="submit()">Complete</button>
+        <sub *ngIf="!isPollFilledIn()"><br>There are missing question answers</sub>
+          <p class="center-text" *ngIf="status">
+            {{ status }}
+            <a class="center-text" mat-raised-button routerLink="/">Home</a>
+          </p>
+      </div>
+    </ng-container>
+    <ng-template #elseBlock>
+      <mat-spinner class="auto-margin"></mat-spinner>
+    </ng-template>
+  </form>
+</ng-container>
+<ng-template #elseBlock>
+  <p>Bad Id!</p>
+</ng-template>

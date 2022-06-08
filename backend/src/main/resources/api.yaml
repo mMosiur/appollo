@@ -1,0 +1,438 @@
+openapi: 3.0.3
+info:
+  title: ApPOLLo backend API
+  description: >-
+    ApPOLLo API enables creation and management of polls, answers and app's
+    users.
+  version: 0.0.3
+paths:
+  /polls:
+    post:
+      description: Create a new poll.
+      operationId: createPoll
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Poll'
+        required: true
+      responses:
+        '201':
+          description: Poll created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Poll'
+        '400':
+          description: Bad request body.
+        '401':
+          description: User not authorized to create poll.
+        '403':
+          description: Forbidden acsess.
+    get:
+      description: Get all polls.
+      operationId: getPolls
+      responses:
+        '200':
+          description: A list of all active polls.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PollLabel'
+  /polls/{id}:
+    get:
+      description: Get a poll of a given id.
+      operationId: getPollById
+      parameters:
+        - name: id
+          description: Id of the requested poll.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      responses:
+        '200':
+          description: A poll object of a given id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Poll'
+        '401':
+          description: Not Authorized.
+        '404':
+          description: Poll not found.
+    put:
+      description: update poll with given id
+      operationId: updatePoll
+      parameters:
+        - name: id
+          description: Id of the poll to update
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Poll'
+        required: true
+      responses:
+        '200':
+          description: The successfully updated state of given poll
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Poll'
+        '400':
+          description: Bad request body.
+        '401':
+          description: User not authenticated.
+        '403':
+          description: User not authorized to delete this poll.
+        '404':
+          description: Poll not found
+    delete:
+      description: Remove a poll of a given id.
+      operationId: deletePollById
+      parameters:
+        - name: id
+          description: Id of the deleted poll.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      responses:
+        '204':
+          description: Poll successfully deleted.
+        '401':
+          description: User not authenticated.
+        '403':
+          description: User not authorized to delete this poll.
+        '404':
+          description: Poll not found.
+  /polls/{id}/answers:
+    post:
+      description: Add a set of user submitted answers to the given poll.
+      operationId: submitAnswersToPollById
+      parameters:
+        - name: id
+          description: Id of the target poll.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Answer'
+        required: true
+      responses:
+        '201':
+          description: Answers submitted succesfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Answer'
+        '400':
+          description: Bad request body.
+        '401':
+          description: User not authenticated.
+        '404':
+          description: Poll doesn't exist.
+        '409':
+          description: Conflict - poll no longer active.
+    get:
+      description: Get answer submits for a poll of a given id.
+      operationId: getAnswersToPollById
+      parameters:
+        - name: id
+          description: Id of the target poll.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      responses:
+        '200':
+          description: A list of answer submits.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Answer'
+        '401':
+          description: User not authenticated.
+        '403':
+          description: User not authorized to browse answers to this poll.
+        '404':
+          description: Poll doesn't exist.
+  /users:
+    post:
+      description: Create a new user.
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '201':
+          description: User created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request body.
+  /users/{id}:
+    get:
+      description: Get user of a given id.
+      operationId: getUserById
+      parameters:
+        - name: id
+          description: Id of the requested user.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      responses:
+        '200':
+          description: A user object of a given id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: User not authenticated.
+        '403':
+          description: User not authorized to view this user.
+        '404':
+          description: User not found.
+    put:
+      description: Edit user of a given id.
+      operationId: editUserById
+      parameters:
+        - name: id
+          description: Id of the edited user.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        '200':
+          description: A user object of a given id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request body.
+        '401':
+          description: User not authenticated.
+        '403':
+          description: User not authorized to edit this user.
+        '404':
+          description: User not found.
+    delete:
+      description: Delete user of a given id.
+      operationId: deleteUserById
+      parameters:
+        - name: id
+          description: Id of the requested user.
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            example: 1234
+      responses:
+        '204':
+          description: User successfully deleted.
+        '401':
+          description: User not authenticated.
+        '403':
+          description: User not authorized to delete this user.
+        '404':
+          description: User not found.
+  /users/login:
+    post:
+      description: Login a user.
+      operationId: loginUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginAttempt'
+        required: true
+      responses:
+        '200':
+          description: User successfully logged in.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+        '400':
+          description: Bad request body.
+        '401':
+          description: Bad credentials.
+components:
+  schemas:
+    Poll:
+      type: object
+      required:
+        - questions
+      properties:
+        id:
+          type: integer
+          example: 1234
+          readOnly: true
+        name:
+          type: string
+          default: Poll
+          example: Favorite things poll
+        is_active:
+          type: boolean
+          default: true
+          readOnly: true
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+    Question:
+      type: object
+      required:
+        - text
+        - type
+      properties:
+        id:
+          type: integer
+          example: 1234
+          readOnly: true
+        text:
+          type: string
+          example: What is your favorite color?
+          description: Question content text.
+        type:
+          type: string
+          example: radio
+          enum:
+            - text
+            - radio
+            - checkbox
+            - email
+            - datetime
+            - number
+          description: Question type.
+        options:
+          type: array
+          items:
+            type: string
+    Answer:
+      type: object
+      required:
+        - question_id
+        - answer_json
+      properties:
+        id:
+          type: integer
+          example: 1234
+          readOnly: true
+        question_id:
+          type: integer
+          example: 1234
+        answer_json:
+          type: string
+          example: Blue
+          description: Answer text (possibly a JSON object).
+    PollLabel:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1234
+          readOnly: true
+        name:
+          type: string
+          example: Favorite things poll
+    AuthToken:
+      type: object
+      properties:
+        value:
+          type: string
+          example: "312-3fjsdkf123-1143252k423-dsaas0"
+    User:
+      type: object
+      required:
+        - username
+        - password
+        - firstname
+        - lastname
+        - email
+      properties:
+        id:
+          type: integer
+          example: 1234
+          readOnly: true
+        username:
+          type: string
+          example: FlyingPanda98
+        password:
+          type: string
+          example: Securepassword1337!
+        firstname:
+          type: string
+          example: John
+        lastname:
+          type: string
+          example: Bravo
+        email:
+          type: string
+          example: flpanda98@site.com
+    UserLoginAttempt:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: FlyingPanda98
+        password:
+          type: string
+          example: Securepassword1337!

@@ -1,0 +1,47 @@
+{
+  "id": 1234,
+  "is_active": true,
+  "name": "Favorite things poll",
+  "questions": [
+    {
+      "id": 11,
+      "type": "text",
+      "text": "How was your day today?"
+    },
+    {
+      "id": 12,
+      "type": "radio",
+      "text": "What is your sex?",
+      "options": [
+        "male",
+        "female",
+        "prefer not to specify"
+      ]
+    },
+    {
+      "id": 13,
+      "type": "checkbox",
+      "text": "What do you like?",
+      "options": [
+        "apples",
+        "bananas",
+        "oranges"
+      ]
+    },
+    {
+      "id": 14,
+      "type": "email",
+      "text": "What is your email?"
+    },
+    {
+      "id": 15,
+      "type": "datetime",
+      "text": "When were you born?"
+    },
+    {
+      "id": 16,
+      "type": "number",
+      "text": "How old are you?"
+    }
+  ]
+}

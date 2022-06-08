@@ -1,0 +1,8 @@
+<h2>Checkbox question</h2>
+<section class="example-section">
+  <ul>
+    <li *ngFor="let option of options; index as i">
+      <mat-checkbox (change)="onChange(i, $event)" class="example-margin">{{option}}</mat-checkbox>
+    </li>
+  </ul>
+</section>

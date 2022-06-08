@@ -1,0 +1,10 @@
+<div class="center container">
+  <h1 class="center-text">Available polls</h1>
+  <ng-container *ngFor="let pollLabel of pollLabels">
+    <a mat-stroked-button [routerLink]="pollLabel.id.toString()">
+      <mat-icon mat-list-icon>poll</mat-icon><br>
+      {{pollLabel.name}}
+    </a>
+  </ng-container>
+</div>
+
