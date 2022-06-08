@@ -2,7 +2,8 @@ name: Deploy frontend
 
 on:
   push:
-    branches: [ develop ]
+    branches:
+      - main
     paths: frontend/**
   workflow_dispatch:
 
