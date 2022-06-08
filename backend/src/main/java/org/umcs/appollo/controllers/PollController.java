@@ -39,9 +39,7 @@ public class PollController implements PollsApi {
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Poll> createPoll(@Valid Poll poll) {
-        PollEntity createdPoll;
-        try{
-            createdPoll = pollService.createPoll(poll,
+        PollEntity createdPoll = pollService.createPoll(poll,
                     userService.findOne(
                             ((User)SecurityContextHolder
                                     .getContext()
@@ -49,44 +47,25 @@ public class PollController implements PollsApi {
                                     .getPrincipal())
                                     .getUsername())
                             .getId());
-
-        } catch (ResponseStatusException ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
         return new ResponseEntity<>(pollService.getPoll(createdPoll.getId()), HttpStatus.CREATED);
     }
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deletePollById(Integer id) {
-        try {
-            pollService.deletePoll(id);
-        } catch (ResponseStatusException ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
+        pollService.deletePoll(id);
         return ResponseEntity.noContent().build();
     }
 
     @Override
     public ResponseEntity<List<Answer>> getAnswersToPollById(Integer id) {
-        List<Answer> answers;
-        try {
-            answers = answersService.getAnswersForPoll(id);
-        } catch (ResponseStatusException ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
+        List<Answer> answers = answersService.getAnswersForPoll(id);
         return ResponseEntity.ok().body(answers);
     }
 
     @Override
     public ResponseEntity<Poll> getPollById(Integer id) {
-        Poll poll;
-        try {
-            poll = pollService.getPoll(id);
-
-        } catch (ResponseStatusException ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
+        Poll poll = pollService.getPoll(id);
         return ResponseEntity.ok().body(poll);
     }
 
@@ -104,9 +83,7 @@ public class PollController implements PollsApi {
     @Override
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<Answer>> submitAnswersToPollById(Integer id, @Valid List<Answer> filledPoll) {
-        List<Answer> addPollAnswers;
-        try {
-            addPollAnswers = answersService.addPollAnswers(id, filledPoll,
+        List<Answer> addPollAnswers = answersService.addPollAnswers(id, filledPoll,
                     userService.findOne(
                             ((User) SecurityContextHolder
                                     .getContext()
@@ -114,20 +91,14 @@ public class PollController implements PollsApi {
                                     .getPrincipal())
                                     .getUsername())
                             .getId());
-        } catch (ResponseStatusException ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
+
         return ResponseEntity.ok().body(addPollAnswers);
     }
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Poll> updatePoll(Integer id, @Valid Poll pollDetails) {
-        try {
-            pollDetails = pollService.updatePoll(id, pollDetails);
-        } catch (ResponseStatusException ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
+        pollDetails = pollService.updatePoll(id, pollDetails);
         return ResponseEntity.ok().body(pollDetails);
     }
 }

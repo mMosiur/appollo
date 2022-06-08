@@ -1,18 +1,15 @@
 package org.umcs.appollo.services;
 
-import com.sun.xml.bind.v2.TODO;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import org.umcs.appollo.converters.PollConverter;
 import org.umcs.appollo.converters.QuestionConverter;
+import org.umcs.appollo.exceptions.ResourceNotFoundException;
 import org.umcs.appollo.model.PollEntity;
 import org.umcs.appollo.model.QuestionEntity;
 import org.umcs.appollo.model.api.Poll;
 import org.umcs.appollo.model.api.PollLabel;
 import org.umcs.appollo.model.api.Question;
 import org.umcs.appollo.repository.PollRepository;
-import org.umcs.appollo.repository.QuestionRepository;
 import org.umcs.appollo.repository.UserRepository;
 
 import java.util.ArrayList;
@@ -46,7 +43,7 @@ public class PollService {
     public Poll getPoll(Integer id) {
         Optional<PollEntity> result = pollRepository.findById(id);
         if (result.isEmpty())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poll with id " + id + " not found.");
+            throw new ResourceNotFoundException( "No poll of id " + id + " found.");
 
         PollEntity pollEntity = result.get();
         return pollConverter.FromEntityToApiDetailed(pollEntity);
@@ -54,9 +51,6 @@ public class PollService {
 
     public PollEntity createPoll(Poll poll, int owner_id) {
         PollEntity pollEntity = pollConverter.FromApiToEntity(poll);
-        if (pollEntity == null)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Poll not found");
-
         pollEntity.setId(null);
         pollEntity.setUser(userRepository.getById(owner_id));
         pollEntity.setQuestions(null);
@@ -72,21 +66,20 @@ public class PollService {
     }
 
     public void deletePoll(Integer id) {
-        if (!pollRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poll with id " + id + " not found.");
-        }
+        if (!pollRepository.existsById(id))
+            throw new ResourceNotFoundException( "No poll of id " + id + " found.");
+
         PollEntity poll = pollRepository.getById(id);
         pollRepository.delete(poll);
     }
 
     public Poll updatePoll(Integer id, Poll newPoll) {
-        if (!pollRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poll with id " + id + " not found.");
-        }
+        if (!pollRepository.existsById(id))
+            throw new ResourceNotFoundException( "No poll of id " + id + " found.");
+
         PollEntity newPollEntity = pollConverter.FromApiToEntity(newPoll);
-        if (newPollEntity == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Poll not found");
-        }
+
+        // TODO: 08.06.2022 kasowanie uzytkownika po update oraz dodaje edytowane pytanie jako zupełnie nowe pytanie
         for (QuestionEntity question : newPollEntity.getQuestions())
             question.setPoll(newPollEntity);
         newPollEntity.setId(id);
