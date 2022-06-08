@@ -1,4 +1,4 @@
-enum QuestionType {
+export enum QuestionType {
   Text = 'text',
   Radio = 'radio',
   Checkbox = 'checkbox',
@@ -6,5 +6,3 @@ enum QuestionType {
   Datetime = 'datetime',
   Number = 'number'
 }
-
-export default QuestionType;

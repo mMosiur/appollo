@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Poll } from 'src/app/shared/models/poll';
 import { PollService } from 'src/app/shared/services/poll.service';
-import PollAnswer from '../../models/poll-answer';
+import { PollAnswer } from '../../models/poll-answer';
 
 @Component({
   selector: 'app-answer-poll',
@@ -11,7 +11,7 @@ import PollAnswer from '../../models/poll-answer';
 })
 export class AnswerPollComponent implements OnInit {
 
-  @Input() id: string | null = null;
+  @Input() id: number | null = null;
 
   title = 'apPOLLo';
   poll?: Poll;
@@ -41,11 +41,12 @@ export class AnswerPollComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.paramMap.get('id');
-    this.pollService.getPollById(1).subscribe(data => {
+    this.id = parseInt(this.route.snapshot.paramMap.get('id') ?? '');
+    this.pollService.getPollById(this.id).subscribe(data => {
       this.poll = data;
       this.answers = this.poll!.questions.map(_ => '');
     });
+    console.log(`on init with id '${this.id}'`);
   }
 
   onAnswerChange(index: number, value: string) {

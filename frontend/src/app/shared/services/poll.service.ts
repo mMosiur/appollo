@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import PollAnswer from 'src/app/modules/answer-poll/models/poll-answer';
+import { PollAnswer } from 'src/app/modules/answer-poll/models/poll-answer';
 import { environment } from 'src/environments/environment';
 import { Poll } from '../models/poll';
 import { PollLabel } from '../models/poll-label';
-import QuestionType from '../models/questions-types';
+import { QuestionType } from '../models/questions-types';
 
 @Injectable()
 export class PollService {

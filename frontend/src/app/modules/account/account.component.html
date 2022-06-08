@@ -4,6 +4,8 @@
   <ng-template #thenBlock>
     <p>Welcome, <em>{{user?.username}}.</em></p>
     <button type="button" mat-raised-button color="primary" (click)="onLogoutClick()">Logout</button>
+    <p></p>
+    <a mat-raised-button routerLink="/">Home</a>
   </ng-template>
   <ng-template #elseBlock>
     <p>You are not logged in.</p>
