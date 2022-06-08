@@ -9,6 +9,8 @@ import { AccountService } from './shared/services/account.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './shared/helpers/jwt.interceptor';
 import { AuthGuard } from './shared/helpers/auth.guard';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 @NgModule({
   declarations: [
@@ -21,6 +23,7 @@ import { AuthGuard } from './shared/helpers/auth.guard';
     MatButtonModule,
     MatIconModule,
     HttpClientModule,
+    BrowserAnimationsModule
   ],
   providers: [
     AuthGuard,

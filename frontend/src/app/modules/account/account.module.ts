@@ -11,6 +11,7 @@ import { AccountService } from 'src/app/shared/services/account.service';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     FormsModule,
     MatProgressSpinnerModule,
     MatButtonModule,
+    MatListModule
   ],
   providers: [
     AccountService,
