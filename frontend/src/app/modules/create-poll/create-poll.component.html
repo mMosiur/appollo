@@ -1,0 +1,28 @@
+<div class="center container">
+  <h1 class="center-text">Create poll</h1>
+
+  <mat-form-field>
+    <mat-label>Poll name</mat-label>
+    <input type="text" matInput required [(ngModel)]="poll.name">
+  </mat-form-field>
+
+  <div class="button-group">
+    <button mat-raised-button color="accent" (click)="openDialog()">Add question</button>
+    <button mat-raised-button [disabled]="!canCreate" color="primary" (click)="createPoll()">Create poll</button>
+  </div>
+
+  <div cdkDropList class="question-list" (cdkDropListDropped)="drop($event)">
+    <div class="question-box" *ngFor="let question of poll.questions" cdkDrag>
+      <mat-list dense>
+        [<em>{{question.type}}</em>]
+        <h2>{{question.text}}</h2>
+        <ng-container *ngIf="question.options">
+          <h4>Options</h4>
+          <mat-list-item *ngFor="let option of question.options">
+          {{option}}
+          </mat-list-item>
+        </ng-container>
+      </mat-list>
+    </div>
+  </div>
+</div>

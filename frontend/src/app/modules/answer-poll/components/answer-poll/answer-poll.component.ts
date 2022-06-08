@@ -50,7 +50,6 @@ export class AnswerPollComponent implements OnInit {
       this.poll = data;
       this.answers = this.poll!.questions.map(_ => '');
     });
-    console.log(`on init with id '${this.id}'`);
   }
 
   onAnswerChange(index: number, value: string) {

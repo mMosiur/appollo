@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { PollAnswer } from 'src/app/modules/answer-poll/models/poll-answer';
 import { environment } from 'src/environments/environment';
+import { CreatePollRequest } from '../contracts/create-poll-request';
 import { Poll } from '../models/poll';
 import { PollLabel } from '../models/poll-label';
 
@@ -24,5 +25,9 @@ export class PollService {
 
   public getPolls(): Observable<PollLabel[]> {
     return this.http.get<PollLabel[]>(`${this.baseUrl}/polls`);
+  }
+
+  public createPoll(poll: CreatePollRequest): Observable<Poll> {
+    return this.http.post<Poll>(`${this.baseUrl}/polls`, poll);
   }
 }
