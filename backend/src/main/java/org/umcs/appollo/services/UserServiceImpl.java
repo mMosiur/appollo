@@ -12,13 +12,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.umcs.appollo.configuration.RoleNames;
 import org.umcs.appollo.converters.UserConverter;
+import org.umcs.appollo.exceptions.ResourceNotFoundException;
 import org.umcs.appollo.model.RoleEntity;
 import org.umcs.appollo.model.UserEntity;
 import org.umcs.appollo.model.api.User;
-import org.umcs.appollo.repository.RoleRepository;
 import org.umcs.appollo.repository.UserRepository;
 
-import java.awt.print.Book;
 import java.util.*;
 
 @Component
@@ -94,7 +93,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         try {
             return userRepository.findById(id).orElseThrow();
         } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No user of id " + id + " found.");
+            throw new ResourceNotFoundException( "No user of id " + id + " found.",e.getCause());
         }
     }
 
@@ -109,7 +108,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public User edit(int id, User data) {
-        UserEntity target = userRepository.getById(id);
+        UserEntity target;
+        try {
+           target  = userRepository.findById(id).orElseThrow();
+        }
+        catch (NoSuchElementException e) {
+            throw new ResourceNotFoundException("No user of id " + id + " found.", e.getCause());
+        }
         target.setUsername(data.getUsername());
         target.setPassword(bCryptPasswordEncoder.encode(data.getPassword()));
         target.setEmail(data.getEmail());
@@ -123,12 +128,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public void delete(int id) {
         UserEntity user = userRepository.getById(id);
         if(!userRepository.existsById(id))
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Poll with id " + id + " not found.");
+            throw new ResourceNotFoundException("No user of id " + id + " found.");
         else
-        {
-            for (RoleEntity role : user.getRoles())
-                user.removeRole(role);
             userRepository.delete(user);
-        }
+
+
     }
 }
