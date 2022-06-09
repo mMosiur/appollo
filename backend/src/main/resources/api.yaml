@@ -207,6 +207,8 @@ paths:
                 $ref: '#/components/schemas/User'
         '400':
           description: Bad request body.
+        '409':
+          description: Conflicting user data.
   /users/{id}:
     get:
       description: Get user of a given id.
@@ -342,7 +344,7 @@ components:
       properties:
         id:
           type: integer
-          example: 1234
+          example: 1
           readOnly: true
         text:
           type: string
@@ -371,7 +373,7 @@ components:
       properties:
         id:
           type: integer
-          example: 1234
+          example: 1
           readOnly: true
         question_id:
           type: integer
