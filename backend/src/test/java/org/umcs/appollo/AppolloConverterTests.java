@@ -86,19 +86,6 @@ public class AppolloConverterTests {
         user1.setLastname(lastName1);
 
         user2Entity = new UserEntity();
-//        user2Entity.setId(user2Id);
-//        user2Entity.setUsername(username2);
-//        user2Entity.setPassword(password2);
-//        user2Entity.setEmail(email2);
-//        user2Entity.setFirstName(firstName2);
-//        user2Entity.setLastName(lastName2);
-//        user2 = new User();
-//        user2.setId(user2Id);
-//        user2.setUsername(username2);
-//        user2.setPassword(password2);
-//        user2.setEmail(email2);
-//        user2.setFirstname(firstName2);
-//        user2.setLastname(lastName2);
 
         // Model a poll
         pollEntity.setId(pollId);
@@ -126,16 +113,11 @@ public class AppolloConverterTests {
         answer.setAnswerJson(answerJson);
 
         // Connect relations
-        List<QuestionEntity> questionEntitiesList = new LinkedList<>();
-        questionEntitiesList.add(questionEntity);
         List<Question> questionDetailsList = new LinkedList<>();
         questionDetailsList.add(question);
         List<AnswerEntity> answerEntitiesList = new LinkedList<>();
         answerEntitiesList.add(answerEntity);
-        List<Answer> answerDetailsList = new LinkedList<>();
-        answerDetailsList.add(answer);
 
-        pollEntity.setQuestions(questionEntitiesList);
         poll.setQuestions(questionDetailsList);
         questionEntity.setPoll(pollEntity);
         questionEntity.setAnswers(answerEntitiesList);
@@ -168,8 +150,6 @@ public class AppolloConverterTests {
         Assert.assertEquals(poll.getId().intValue(), pollId);
         Assert.assertEquals(poll.getName(), pollName);
         Assert.assertEquals(poll.getIsActive(), true);
-        Assert.assertEquals(poll.getQuestions().size(), 1);
-        Assert.assertEquals(poll.getQuestions().get(0), question);
     }
 
     @Test
@@ -187,7 +167,6 @@ public class AppolloConverterTests {
         PollEntity pollEntity = pollConverter.FromApiToEntity(poll);
         Assert.assertEquals(pollEntity.getId().intValue(), pollId);
         Assert.assertEquals(pollEntity.getName(), pollName);
-        Assert.assertEquals(pollEntity.getQuestions().size(), 1);
     }
 
     @Test

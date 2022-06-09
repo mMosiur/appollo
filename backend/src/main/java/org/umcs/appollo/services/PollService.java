@@ -13,7 +13,6 @@ import org.umcs.appollo.repository.PollRepository;
 import org.umcs.appollo.repository.QuestionRepository;
 import org.umcs.appollo.repository.UserRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,7 +56,6 @@ public class PollService {
         PollEntity pollEntity = pollConverter.FromApiToEntity(poll);
         pollEntity.setId(null);
         pollEntity.setUser(userRepository.getById(owner_id));
-        pollEntity.setQuestions(null);
         pollEntity = pollRepository.save(pollEntity);
         createAndSetQuestionEntitiesToPollEntity(poll, pollEntity);
         return pollRepository.save(pollEntity);
@@ -76,20 +74,19 @@ public class PollService {
             throw new ResourceNotFoundException( "No poll of id " + id + " found.");
 
         PollEntity target = pollRepository.getById(id);
+        target.getQuestions().clear();
+        target = pollRepository.save(target);
 
-        questionRepository.deleteAll(target.getQuestions());
         createAndSetQuestionEntitiesToPollEntity(newPoll, target);
-
         return pollConverter.FromEntityToApiDetailed(pollRepository.save(target));
     }
 
     private void createAndSetQuestionEntitiesToPollEntity(Poll newPoll, PollEntity target) {
-        List<QuestionEntity> questionEntities = new ArrayList<>();
+        List<QuestionEntity> questionEntities = target.getQuestions();
         for (Question question: newPoll.getQuestions()) {
             QuestionEntity questionEntity = questionConverter.FromApiToEntity(question);
             questionEntity.setPoll(target);
             questionEntities.add(questionEntity);
         }
-        target.setQuestions(questionEntities);
     }
 }

@@ -1,5 +1,8 @@
 package org.umcs.appollo.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -21,6 +24,7 @@ public class QuestionEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="poll_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private PollEntity poll;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
