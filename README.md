@@ -38,6 +38,8 @@ Więcej szczegółowych informacji o naszej aplikacji w folderze z dokumentacją
 - Backend zdeployowany do Azure Web Apps:
 
   [https://umcs-appollo.azurewebsites.net](https://umcs-appollo.azurewebsites.net/)
+  
+  Swagger UI: [https://umcs-appollo.azurewebsites.net/swagger-ui](https://umcs-appollo.azurewebsites.net/swagger-ui/)
 
 - Baza danych (PostgreSQL) zdeployowana do Azure.
 
