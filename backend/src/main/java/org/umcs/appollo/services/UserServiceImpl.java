@@ -124,6 +124,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         catch (NoSuchElementException e) {
             throw new ResourceNotFoundException("No user of id " + id + " found.", e.getCause());
         }
+
+        UserEntity a = userRepository.findByUsername(data.getUsername());
+        if (a != null)
+            throw new ConflictException("Username already taken.");
+        a = userRepository.findByEmail(data.getEmail());
+        if (a != null)
+            throw new ConflictException("Email already taken.");
+
         target.setUsername(data.getUsername());
         target.setPassword(bCryptPasswordEncoder.encode(data.getPassword()));
         target.setEmail(data.getEmail());

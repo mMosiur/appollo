@@ -270,6 +270,8 @@ paths:
           description: User not authorized to edit this user.
         '404':
           description: User not found.
+        '409':
+          description: Conflicting user data.
     delete:
       description: Delete user of a given id.
       operationId: deleteUserById
