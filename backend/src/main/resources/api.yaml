@@ -4,7 +4,7 @@ info:
   description: >-
     ApPOLLo API enables creation and management of polls, answers and app's
     users.
-  version: 0.0.3
+  version: 0.0.9
 paths:
   /polls:
     post:
