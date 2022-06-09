@@ -101,7 +101,6 @@ public class AnswersServiceTests {
         List<AnswerEntity> answerEntitiesList = new LinkedList<>();
         answerEntitiesList.add(answerEntity);
 
-        pollEntity.setQuestions(questionEntitiesList);
         pollDetails.setQuestions(questionDetailsList);
         questionEntity.setAnswers(answerEntitiesList);
         questionEntity.setPoll(pollEntity);

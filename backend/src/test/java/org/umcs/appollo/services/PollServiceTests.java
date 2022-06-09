@@ -71,12 +71,9 @@ public class PollServiceTests {
                 "Red", "Green", "Blue"
         }));
 
-        List<QuestionEntity> questionEntitiesList = new LinkedList<>();
-        questionEntitiesList.add(questionEntity);
         List<Question> questionDetailsList = new LinkedList<>();
         questionDetailsList.add(questionConverter.FromEntityToApi(questionEntity));
 
-        pollEntity.setQuestions(questionEntitiesList);
         pollDetails.setQuestions(questionDetailsList);
     }
 
@@ -125,6 +122,7 @@ public class PollServiceTests {
     @Test
     public void updatePollCorrect(){
         given(pollRepository.existsById(1)).willReturn(true);
+        given(pollRepository.getById(1)).willReturn(pollEntity);
         pollDetails.setName("test123");
 
         when(pollRepository.save(any(PollEntity.class))).thenReturn(pollConverter.FromApiToEntity(pollDetails));
