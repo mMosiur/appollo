@@ -4,7 +4,7 @@ info:
   description: >-
     ApPOLLo API enables creation and management of polls, answers and app's
     users.
-  version: 0.0.3
+  version: 0.0.9
 paths:
   /polls:
     post:
@@ -207,6 +207,8 @@ paths:
                 $ref: '#/components/schemas/User'
         '400':
           description: Bad request body.
+        '409':
+          description: Conflicting user data.
   /users/{id}:
     get:
       description: Get user of a given id.
@@ -268,6 +270,8 @@ paths:
           description: User not authorized to edit this user.
         '404':
           description: User not found.
+        '409':
+          description: Conflicting user data.
     delete:
       description: Delete user of a given id.
       operationId: deleteUserById
@@ -342,7 +346,7 @@ components:
       properties:
         id:
           type: integer
-          example: 1234
+          example: 1
           readOnly: true
         text:
           type: string
@@ -371,7 +375,7 @@ components:
       properties:
         id:
           type: integer
-          example: 1234
+          example: 1
           readOnly: true
         question_id:
           type: integer

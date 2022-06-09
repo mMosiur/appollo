@@ -1,4 +1,5 @@
 package org.umcs.appollo.controllers;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -6,7 +7,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,14 +15,13 @@ import org.springframework.web.server.ResponseStatusException;
 import org.umcs.appollo.api.UsersApi;
 import org.umcs.appollo.configuration.RoleNames;
 import org.umcs.appollo.configuration.TokenProvider;
+import org.umcs.appollo.exceptions.ConflictException;
 import org.umcs.appollo.model.RoleEntity;
 import org.umcs.appollo.model.UserEntity;
 import org.umcs.appollo.model.api.AuthToken;
 import org.umcs.appollo.model.api.User;
 import org.umcs.appollo.model.api.UserLoginAttempt;
 import org.umcs.appollo.services.UserService;
-
-import java.util.Set;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -66,6 +65,8 @@ public class UserController implements UsersApi {
         }
         catch (ResponseStatusException e){
             throw new RuntimeException(e.getMessage());
+        } catch (DataIntegrityViolationException e) {
+            throw new ConflictException(e.getMessage());
         }
 
         return new ResponseEntity<>(result, HttpStatus.CREATED);

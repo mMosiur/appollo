@@ -2,7 +2,6 @@ package org.umcs.appollo.converters;
 
 import org.springframework.stereotype.Service;
 import org.umcs.appollo.model.PollEntity;
-import org.umcs.appollo.model.QuestionEntity;
 import org.umcs.appollo.model.api.Poll;
 import org.umcs.appollo.model.api.PollLabel;
 import org.umcs.appollo.model.api.Question;
@@ -47,11 +46,6 @@ public class PollConverter {
     public PollEntity FromApiToEntity(Poll poll) {
         PollEntity pollEntity = new PollEntity();
         pollEntity.setId(poll.getId());
-        List<QuestionEntity> questions = poll.getQuestions()
-                .stream()
-                .map(questionConverter::FromApiToEntity)
-                .collect(Collectors.toList());
-        pollEntity.setQuestions(questions);
         pollEntity.setName(poll.getName());
         return pollEntity;
     }
