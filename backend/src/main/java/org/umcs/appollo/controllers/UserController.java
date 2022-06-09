@@ -1,5 +1,4 @@
 package org.umcs.appollo.controllers;
-import org.h2.jdbc.JdbcSQLException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
